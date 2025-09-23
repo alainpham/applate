@@ -182,7 +182,7 @@
     "currentVersionResource": "https://raw.githubusercontent.com/alainpham/app-archetypes/master/spring-boot/src/main/resources/META-INF/maven/archetype-metadata.xml",
     "currentVersionExpression": "language:xpath://*:requiredProperty[@key='spring-boot-version']/*:defaultValue/text()",
     "coordinates": "mvn:org.springframework.boot:spring-boot-dependencies",
-    "latestVersionFilter": "3.4.*"
+    "latestVersionFilter": "^3.*"
   },
   {
     "id": 401,
