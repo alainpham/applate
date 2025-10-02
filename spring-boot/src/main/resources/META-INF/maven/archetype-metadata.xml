@@ -24,7 +24,7 @@
       <defaultValue>3.14.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="temurin-image-version">
-      <defaultValue>17.0.16_8-jre	</defaultValue>
+      <defaultValue>17.0.16_8-jre</defaultValue>
     </requiredProperty>
     <requiredProperty key="opentelemetry-version">
       <defaultValue>2.20.1</defaultValue>
@@ -33,7 +33,7 @@
       <defaultValue>2.8.13</defaultValue>
     </requiredProperty>
     <requiredProperty key="exec-maven-plugin-version">
-      <defaultValue>3.5.1</defaultValue>
+      <defaultValue>3.6.0</defaultValue>
     </requiredProperty>
     
     <!-- app vars -->
