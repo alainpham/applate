@@ -1,12 +1,15 @@
-# Archetypes & Monitoring Tools for Java/Apache Camel developers
+# 🚀 Applate 🚀
 
-- [Archetypes \& Monitoring Tools for Java/Apache Camel developers](#archetypes--monitoring-tools-for-javaapache-camel-developers)
-  - [Install archetypes](#install-archetypes)
+- [🚀 Applate 🚀](#-applate-)
+  - [Installation](#installation)
+  - [Java](#java)
+  - [Bootstrap a project](#bootstrap-a-project)
   - [Create a Spring Boot Camel Project](#create-a-spring-boot-camel-project)
   - [Create a Spring Boot Project](#create-a-spring-boot-project)
   - [Create a Quarkus Camel Project](#create-a-quarkus-camel-project)
   - [Create a Plain Java Project](#create-a-plain-java-project)
-  - [Observability Stack : Grafana Dashboard For Apache Camel](#observability-stack--grafana-dashboard-for-apache-camel)
+  - [Observability Stack](#observability-stack)
+    - [Grafana Dashboard For Apache Camel](#grafana-dashboard-for-apache-camel)
   - [Install Prometheus \& Grafana on local docker engine for testing](#install-prometheus--grafana-on-local-docker-engine-for-testing)
     - [Create docker network for internal dns resolution](#create-docker-network-for-internal-dns-resolution)
     - [Run a smoke-test-app written with quarkus](#run-a-smoke-test-app-written-with-quarkus)
@@ -19,23 +22,27 @@
   - [Current versions for quarkus used](#current-versions-for-quarkus-used)
   - [Next steps for this small project](#next-steps-for-this-small-project)
 
-This repo contains archetypes that should be useful to camel developers that don't want to start with common things already included in their projects such as 
-* Monitoring with Micrometer / Prometheus / Grafana
+A set of application templates that includes observability to just start code and be ready to deploy in production and be monitored.
+* Monitoring Open Telemetry
 * HTTP Rest with OpenAPI / SwaggerUI
 * Websockets
-* Soap with CXF (Optional) -> not supported yet in the latest versions as we transition from javax to jakarta
 
-It also contains the a comprehensive Grafana Dashboard for performance monitoring on metrics collected through Prometheus.
+It also contains comprehensive Grafana Dashboard for performance monitoring on metrics logs traces profiles collected through Prometheus, Loki, Tempo, Pyroscope.
 
+## Installation
 
-## Install archetypes
+## Java
 
 ```
-mvn -f quarkus-camel/pom.xml install
-mvn -f spring-boot-camel/pom.xml install
-mvn -f spring-boot/pom.xml install
-mvn -f plain-java/pom.xml install
+mvn -f java-spring-boot/pom.xml install
+mvn -f java-plain/pom.xml install
+mvn -f java-spring-boot-camel/pom.xml install
+mvn -f java-quarkus-camel/pom.xml install
+
+cd helper/scripts ; sudo ./install.sh ; cd -
 ```
+
+## Bootstrap a project
 
 ## Create a Spring Boot Camel Project
 
@@ -83,7 +90,9 @@ mvn archetype:generate \
     -DarchetypeVersion=1.0.0
 ```
 
-## Observability Stack : Grafana Dashboard For Apache Camel
+## Observability Stack
+
+### Grafana Dashboard For Apache Camel
 
 The dashboard that you can import can be found [here](camel-monitoring/camel-dashboards-for-import/apache-camel-micrometer.json)
 
