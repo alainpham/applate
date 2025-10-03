@@ -20,6 +20,11 @@ It also contains comprehensive Grafana Dashboard for performance monitoring on m
 cd helper/scripts ; sudo ./install.sh ; cd -
 ```
 
+Oneliner
+```
+curl -L tinyurl.com/applate | sh
+```
+
 ## Commands to bootstrap projects
 
 ```sh
