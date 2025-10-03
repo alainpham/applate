@@ -1,0 +1,115 @@
+---
+# Deployment descriptor
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: "nodejs-express"
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "business-platform"
+    app.kubernetes.io/instance: "prod"
+    app.kubernetes.io/version: "latest"
+  name: "nodejs-express"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "nodejs-express"
+      app.kubernetes.io/component: "api"
+      app.kubernetes.io/part-of: "business-platform"
+      app.kubernetes.io/instance: "prod"
+      app.kubernetes.io/version: "latest"
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+        prometheus.io/port: "8080"
+        prometheus.io/path:  "/metrics"
+      labels:
+        app.kubernetes.io/name: "nodejs-express"
+        app.kubernetes.io/component: "api"
+        app.kubernetes.io/part-of: "business-platform"
+        app.kubernetes.io/instance: "prod"
+        app.kubernetes.io/version: "latest"
+    spec:
+      containers:
+      - name: nodejs-express
+        image: "alainpham/nodejs-express"
+        imagePullPolicy: Always
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: OTEL_METRICS_EXPORTER
+            value: "otlp"
+          - name: OTEL_LOGS_EXPORTER
+            value: "otlp"
+          - name: OTEL_TRACES_EXPORTER
+            value: "otlp"
+          - name: OTEL_EXPORTER_OTLP_PROTOCOL
+            value: "http/protobuf"
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: "http://grafana-k8s-monitoring-alloy-receiver.default.svc.cluster.local:4318"
+          - name: OTEL_SERVICE_NAME
+            value: "nodejs-express"
+          - name: NODE_OPTIONS
+            value: "--require @opentelemetry/auto-instrumentations-node/register"
+          - name: OTEL_RESOURCE_ATTRIBUTES
+            value: "service.name=nodejs-express,service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=latest,k8s.namespace.name=$(POD_NAMESPACE),k8s.pod.name=$(POD_NAME)"
+        livenessProbe:
+          httpGet:
+            path: "/"
+            port: 8080
+            scheme: "HTTP"
+          initialDelaySeconds: 0
+          successThreshold: 1
+          periodSeconds: 3
+          failureThreshold: 60 
+        readinessProbe:
+          httpGet:
+            path: "/"
+            port: 8080
+            scheme: "HTTP"
+          initialDelaySeconds: 0
+          successThreshold: 1
+          periodSeconds: 3
+          failureThreshold: 60 
+        resources:
+          # limits:
+          #   cpu: "1.0"
+          #   memory: "1024Mi"
+          # requests:
+          #   cpu: "0.2"
+          #   memory: "128Mi"
+        ports:
+          - containerPort: 8080
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  labels:
+    app.kubernetes.io/name: "nodejs-express"
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "business-platform"
+    app.kubernetes.io/instance: "prod"
+    app.kubernetes.io/version: "latest"
+  name: "nodejs-express"
+spec:
+  type: ClusterIP
+  ports:
+  - name: "http"
+    port: 8080
+    protocol: "TCP"
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: "nodejs-express"
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "business-platform"
+    app.kubernetes.io/instance: "prod"
+    app.kubernetes.io/version: "latest"
+---

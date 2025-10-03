@@ -1,1 +1,0 @@
-RED Metrics and correlation between metrics logs and traces for HTTP services instrumented with OpenTelemetry
