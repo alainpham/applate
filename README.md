@@ -40,6 +40,8 @@ jcamelspring
 # Java Quarkus Camel
 jcamelquarkus
 
+# NodeJS Express
+njsexpress YOUR_PROJECT_NAME
 ```
 
 ## Observability Stack for Dev Environment
