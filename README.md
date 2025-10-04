@@ -62,6 +62,13 @@ docker run --name lgtm -d -p 3000:3000 \
 
 ### Grafana Dashboard for HTTP services
 
+Dashboards for applications that produce mainly `http_server_.*` metrics can be found [here](observability/dashboards-for-import/app/opentelemetry-for-http-services.json)
+
+![Open Telemetry for HTTP Services Dashboard](assets/http-otel-01.png)
+
+![Open Telemetry for HTTP Services Dashboard](assets/http-otel-02.png)
+
+![Open Telemetry for HTTP Services Dashboard](assets/http-otel-03.png)
 
 ### Grafana Dashboard For Apache Camel
 
