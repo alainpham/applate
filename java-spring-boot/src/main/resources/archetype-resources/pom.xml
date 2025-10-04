@@ -408,7 +408,7 @@
                             <workingDirectory>${project.basedir}</workingDirectory>
                             <arguments>
                                 <argument>-c</argument>
-                                <argument><![CDATA[envsubst < src/main/kube/deploy.envsubst.yaml > ${project.build.directory}/${project.artifactId}.yaml]]></argument>
+                                <argument><![CDATA[envsubst < src/main/kube/deploy.envsubst.yaml > ${project.build.directory}/${project.artifactId}-deploy.yaml]]></argument>
                             </arguments>
                             <environmentVariables>
                                 <PROJECT_ARTIFACTID>${project.artifactId}</PROJECT_ARTIFACTID>
