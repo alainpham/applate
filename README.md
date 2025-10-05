@@ -5,7 +5,8 @@
   - [Commands to bootstrap projects](#commands-to-bootstrap-projects)
   - [Observability Stack for Dev Environment](#observability-stack-for-dev-environment)
     - [Grafana Dashboard for HTTP services](#grafana-dashboard-for-http-services)
-    - [Grafana Dashboard For Apache Camel](#grafana-dashboard-for-apache-camel)
+    - [Grafana Dashboard for Apache Camel](#grafana-dashboard-for-apache-camel)
+    - [Grafana Dashboard for Kubernetes](#grafana-dashboard-for-kubernetes)
 
 A set of application templates that includes observability to just start code and be ready to deploy in production and be monitored.
 * Monitoring Open Telemetry
@@ -70,7 +71,7 @@ Dashboards for applications that produce mainly `http_server_.*` metrics can be 
 
 ![Open Telemetry for HTTP Services Dashboard](assets/http-otel-03.png)
 
-### Grafana Dashboard For Apache Camel
+### Grafana Dashboard for Apache Camel
 
 The dashboard that you can import can be found [here](observability/dashboards-for-import/app/apache-camel-micrometer.json)
 
@@ -80,3 +81,9 @@ or here : https://odysee.com/@alainpham:8/apache-camel-monitoring-prometheus-gra
 
 [![Grafana](assets/grafana-dash-sample.png)](http://www.youtube.com/watch?v=0LDgv1nIk-Y)
 
+### Grafana Dashboard for Kubernetes
+
+
+The dashboard that you can import can be found [here](observability/dashboards/infra/k8s-overview.json)
+
+![K8S Overview Dashboard](assets/k8s.png)
