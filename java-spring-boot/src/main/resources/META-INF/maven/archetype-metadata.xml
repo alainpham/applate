@@ -6,7 +6,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <requiredProperties>
     <requiredProperty key="spring-boot-version">
-      <defaultValue>3.5.6</defaultValue>
+      <defaultValue>4.0.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="project-reporting-outputEncoding">
       <defaultValue>UTF-8</defaultValue>
@@ -24,16 +24,16 @@
       <defaultValue>3.14.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="temurin-image-version">
-      <defaultValue>17.0.16_8-jre</defaultValue>
+      <defaultValue>17.0.17_10-jre</defaultValue>
     </requiredProperty>
     <requiredProperty key="opentelemetry-version">
-      <defaultValue>2.20.1</defaultValue>
+      <defaultValue>2.24.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="springdoc-openapi-version">
-      <defaultValue>2.8.13</defaultValue>
+      <defaultValue>3.0.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="exec-maven-plugin-version">
-      <defaultValue>3.6.0</defaultValue>
+      <defaultValue>3.6.3</defaultValue>
     </requiredProperty>
     
     <!-- app vars -->
