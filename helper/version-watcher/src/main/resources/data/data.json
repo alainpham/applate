@@ -85,7 +85,7 @@
     "currentVersionResource": "https://raw.githubusercontent.com/alainpham/applate/master/java-spring-boot-camel/src/main/resources/META-INF/maven/archetype-metadata.xml",
     "currentVersionExpression": "language:xpath://*:requiredProperty[@key='springdoc-openapi-version']/*:defaultValue/text()",
     "coordinates": "mvn:org.springdoc:springdoc-openapi-starter-webmvc-ui",
-    "latestVersionFilter": "^2.*"
+    "latestVersionFilter": "^3.*"
   },
   {
     "id": 208,
@@ -182,7 +182,7 @@
     "currentVersionResource": "https://raw.githubusercontent.com/alainpham/applate/master/java-spring-boot/src/main/resources/META-INF/maven/archetype-metadata.xml",
     "currentVersionExpression": "language:xpath://*:requiredProperty[@key='spring-boot-version']/*:defaultValue/text()",
     "coordinates": "mvn:org.springframework.boot:spring-boot-dependencies",
-    "latestVersionFilter": "^3.*"
+    "latestVersionFilter": "^4.*"
   },
   {
     "id": 401,
