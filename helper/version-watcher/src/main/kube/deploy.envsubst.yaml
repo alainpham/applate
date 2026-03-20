@@ -172,9 +172,6 @@ metadata:
     app.kubernetes.io/instance: "version-watcher-main"
     app.kubernetes.io/version: "1.0.0"
   annotations:
-    nginx.ingress.kubernetes.io/ssl-passthrough: "false"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
   - host: version-watcher.${kube_ingress_root_domain}

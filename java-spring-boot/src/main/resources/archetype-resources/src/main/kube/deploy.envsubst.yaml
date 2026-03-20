@@ -121,9 +121,6 @@ metadata:
     app.kubernetes.io/instance: "${KUBE_LABEL_INSTANCE}"
     app.kubernetes.io/version: "${PROJECT_VERSION}"
   annotations:
-    nginx.ingress.kubernetes.io/ssl-passthrough: "false"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
   - host: ${PROJECT_ARTIFACTID}.${KUBE_INGRESS_ROOT_DOMAIN}
