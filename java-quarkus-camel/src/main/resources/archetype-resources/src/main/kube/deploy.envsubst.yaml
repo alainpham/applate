@@ -114,7 +114,7 @@ spec:
           - name: QUARKUS_OTEL_SDK_DISABLED
             value: "false"
           - name: QUARKUS_OTEL_RESOURCE_ATTRIBUTES
-            value: "service.name=${PROJECT_ARTIFACTID},service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=${PROJECT_VERSION}"
+            value: "service.name=${PROJECT_ARTIFACTID},service.namespace=$(POD_NAMESPACE),service.version=${PROJECT_VERSION},service.instance.id=$(POD_NAMESPACE).$(POD_NAME).${PROJECT_ARTIFACTID}"
         livenessProbe:
           httpGet:
             path: "/q/health/ready"
