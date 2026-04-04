@@ -6,7 +6,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <requiredProperties>
     <requiredProperty key="spring-boot-version">
-      <defaultValue>4.0.1</defaultValue>
+      <defaultValue>4.0.5</defaultValue>
     </requiredProperty>
     <requiredProperty key="project-reporting-outputEncoding">
       <defaultValue>UTF-8</defaultValue>
@@ -27,7 +27,7 @@
       <defaultValue>17.0.18_8-jre</defaultValue>
     </requiredProperty>
     <requiredProperty key="opentelemetry-version">
-      <defaultValue>2.26.0</defaultValue>
+      <defaultValue>2.26.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="springdoc-openapi-version">
       <defaultValue>3.0.2</defaultValue>
