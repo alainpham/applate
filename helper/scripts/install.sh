@@ -49,7 +49,6 @@ rm ~/.m2/repository/net/alainpham/applate/nodejs-express/nodejs-express.zip
 fi
 
 mkdir -p ~/.m2/repository/net/alainpham/applate/nodejs-express/
-rm -r ~/.m2/repository/net/alainpham/applate/nodejs-express/*
 zip -r ~/.m2/repository/net/alainpham/applate/nodejs-express/nodejs-express.zip $SCRIPT_DIR/../../nodejs-express -x '*node_modules*'
 
 if [ -f /usr/local/bin/njsexpress ]; then
