@@ -87,7 +87,7 @@ function formAsJson(formid) {
 
 function populateTableHeader(tableId, dataTable,type) {
     var table = $(tableId);
-    if (table.find('thead').length === 0) {
+    if (table.find('thead').length === 0 && dataTable.length > 0) {
         var headers = Object.keys(dataTable[0]);
         var thead = $('<thead></thead>');
         var tr = $('<tr></tr>');

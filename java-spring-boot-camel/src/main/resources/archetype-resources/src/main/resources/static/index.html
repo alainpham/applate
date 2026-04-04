@@ -1,28 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>${artifactId}</title>
     <meta name="description" content="${artifactId} interface">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/framework/all.css" />
-
-    <!-- main technical functions declared here -->
-    <script src="js/main.js"></script>
-
-    <!-- custom business logic here -->
-    <script src="app/app.js"></script>
-
-    <!-- script to lauch before for theme lading -->
-    <script src="js/head.js"></script>
+    <script src="js/framework/jquery-3.7.1.min.js"></script>
 
 </head>
 
 <body>
-
-    <div w3-include-html="partials/header.html"></div>
+    <div id="navbar"></div>
     <div class="content-body">
         <!-- PUT YOUR CONTENT HERE -->
         <div class="jumbotron"  >
@@ -32,37 +22,33 @@
             <div class="flex-item " >
                 <form id="data-form" class="flex-container-col">
                     <label>Id</label>
-                    <input type="text" id="id" value="xx" placeholder="Id">
+                    <input type="text" name="id" value="xx" placeholder="Id">
                     <label>Name</label>
-                    <input type="text" id="name" value="John" placeholder="Your name">
+                    <input type="text" name="name" value="John" placeholder="Your name">
                     <label>First Name</label>
-                    <input type="text" id="firstName" value="Doe" placeholder="Your first name">
+                    <input type="text" name="firstName" value="Doe" placeholder="Your first name">
                     <label>Your vote</label>
-                    <select id="vote">
+                    <select name="vote">
                         <option value="yes">Yes</option>
                         <option value="no">No</option>
                     </select>
                     <label>Message content</label>
-                    <textarea id="text-area"></textarea>
+                    <textarea name="textArea"></textarea>
                 </form>
-                <button  id="send-button"
-                    onclick="backEndRequest(null,'${svc-send-msg-path}','post', formDataToJson('data-form'))">send</button>
+                <button id="send-button">send</button>
             </div>
             <div class="flex-item flex-grow">
-                <div   class="flex-container">
-                    <h2  >State Table</h2>
-                    <button onclick="clearTable('state-table')">clear</button>
-                    <button onclick="processSocketMsg(exampleStateEvent)">populate state example</button>
+                <div class="flex-container">
+                    <h2>State Table</h2>
                 </div>
-                <table id="state-table"></table>
+                <table id="state-table">
+                </table>
             </div>
         </div>
         <div class="flex-container">
             <div class="flex-item flex-grow flex-container-col">
                 <div class="flex-container">
                     <h2>Log messages</h2>
-                    <button onclick="clearTable('log-table')">clear</button>
-                    <button onclick="processSocketMsg(exampleEvent)">populate example</button>
                 </div>
                 <table id="log-table">
                 </table>
@@ -73,14 +59,15 @@
             </div>
         </div>
         <div class="flex-container">
- 
         </div>
-
     </div>
     <!-- END PUT YOUR CONTENT HERE -->
 
-    <script src="js/render.js"></script>
+    <!-- main techical functions -->
+    <script src="js/main.js"></script>
 
+    <!-- business logic -->
+    <script src="js/functional.js"></script>
 </body>
 
 </html>

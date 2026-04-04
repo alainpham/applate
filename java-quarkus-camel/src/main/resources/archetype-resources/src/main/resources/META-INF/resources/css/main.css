@@ -60,8 +60,6 @@ body {
 
 }
 
-
-
 @media (hover: hover) {
 	.nav a:hover{
 		background-color: var(--tmpl-main-color-darker);
@@ -164,22 +162,24 @@ body {
 
 /* CONTENT STRUCTURE*/
 
-
 .content-body{
 	margin-top: 52px;
 	height: 100%;
 }
 
+/* A line of flex items */
 .flex-container {
 	display: flex;
 	/* flex-wrap: wrap; */
 }
 
+/* for flow into colum direction no matter what */
 .flex-container-col{
 	display: flex;
 	flex-direction: column;
 }
 
+/* an item in a line */
 .flex-item{
 	margin : 12px;
 	padding: 24px;
@@ -197,6 +197,7 @@ body {
 	}
 }
 
+/* force an item to grow and take remaining space */
 .flex-grow {
 	flex-grow: 1;
 	overflow-x: auto;
@@ -277,3 +278,5 @@ pre {
 	font-size: 0.8em;
 	margin: 0.1em;
 }
+
+
