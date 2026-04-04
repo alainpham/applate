@@ -8,3 +8,4 @@
 **/*.iml
 **/.idea
 **/log-camel-lsp.out
+**/node_modules
