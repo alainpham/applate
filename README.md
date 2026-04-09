@@ -18,7 +18,7 @@ It also contains comprehensive Grafana Dashboard for performance monitoring on m
 ## Installation
 
 ```
-cd helper/scripts ; sudo ./install.sh ; cd -
+cd helper/scripts ; ./install.sh ; cd -
 ```
 
 Oneliner
