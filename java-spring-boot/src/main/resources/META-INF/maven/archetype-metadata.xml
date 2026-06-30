@@ -15,10 +15,10 @@
       <defaultValue>UTF-8</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-compiler-target">
-      <defaultValue>17</defaultValue>
+      <defaultValue>25</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-compiler-source">
-      <defaultValue>17</defaultValue>
+      <defaultValue>25</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-compiler-plugin-version">
       <defaultValue>3.15.0</defaultValue>
