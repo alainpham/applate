@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Version Tracker</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/tracker.css">
+</head>
+<body>
+  <div id="navbar"></div>
+  <main class="content-body">
+    <section class="jumbotron"><h1>Version Tracker</h1></section>
+    <section class="flex-container tracker-layout">
+      <div class="flex-item form-panel">
+        <h2 id="form-title">Add artifact</h2>
+        <form id="artifact-form" class="flex-container-col">
+          <input type="hidden" name="id">
+          <label for="project">Project</label>
+          <input id="project" name="project" required placeholder="Payments service">
+          <label for="currentVersionResource">Current version resource (HTTPS)</label>
+          <input id="currentVersionResource" name="currentVersionResource" type="url" required placeholder="https://raw.example.com/pom.xml">
+          <label for="currentVersionExpression">Current version expression</label>
+          <textarea id="currentVersionExpression" name="currentVersionExpression" required placeholder="Regex or XPath"></textarea>
+          <label for="coordinates">Coordinates</label>
+          <input id="coordinates" name="coordinates" required placeholder="mvn:org.example:artifact or docker:library/nginx">
+          <label for="latestVersionFilter">Latest version filter</label>
+          <input id="latestVersionFilter" name="latestVersionFilter" placeholder="e.g. 1.2.x or minor">
+          <div>
+            <button type="submit">Save artifact</button>
+            <button type="button" id="cancel-edit" class="secondary hidden">Cancel</button>
+          </div>
+        </form>
+        <p id="form-message" role="status"></p>
+      </div>
+      <div class="flex-item flex-grow">
+        <div class="section-heading">
+          <h2>Artifacts</h2>
+          <button type="button" id="refresh-button">Refresh</button>
+        </div>
+        <div class="table-scroll">
+          <table id="artifact-table">
+            <thead><tr>
+              <th>Project</th><th>Coordinates</th><th>Current</th>
+              <th>Latest (filtered)</th><th>Latest &amp; greatest</th><th>Actions</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p id="table-message">Loading artifacts…</p>
+      </div>
+    </section>
+  </main>
+  <script src="js/main.js"></script>
+  <script src="js/functional.js"></script>
+</body>
+</html>

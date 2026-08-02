@@ -1,0 +1,282 @@
+@import url("framework/fonts/overpass-webfont/overpass.css");
+@import url("framework/fonts/overpass-mono-webfont/overpass-mono.css");
+
+@import 'main-light-yellow.css';
+
+* {
+	font-family: overpass,sans-serif;
+	box-sizing: border-box;
+	color: var(--tmpl-text-color);
+	transition: all 0.2s ease 0s;
+	font-size: 1em;
+}
+
+body {
+	margin: 0px;
+	overflow-y:scroll;
+	scrollbar-width: 15px;
+	background-color: var(--tmpl-back-color);
+}
+
+
+/* NAVIGATION MENU STYLE */
+
+
+.nav {
+	display: flex;
+	position: fixed;
+	min-height: 52px;
+	top: 0;
+	width: 100%;
+	background-color: var(--tmpl-back-color-light);
+}
+
+
+.logo{
+	font-weight: bold;
+	width: 8em;
+	display: block;
+	text-decoration: none;
+	background-image: var(--tmpl-logo-text);
+	background-size: auto 2em;
+	background-repeat: no-repeat;
+	background-position: top 0.5em left 0.5em;
+}
+
+
+.negative {
+	background-color:var(--tmpl-negative-color-dark);
+}
+
+.positive {
+	background-color:var(--tmpl-positive-color-dark);
+}
+
+.nav a, .nav .status {
+	padding: 1em 1em;
+	display: block;
+	text-decoration: none;
+	font-weight: 500;
+
+}
+
+@media (hover: hover) {
+	.nav a:hover{
+		background-color: var(--tmpl-main-color-darker);
+		transform: translateY(0.3em);
+	}
+}
+
+.hidden {
+	display: none!important;
+}
+
+.nav .action-btn {
+	display: none;
+	
+}
+
+@media screen and (max-width: 900px) {
+	.nav a:not(:first-child) {display: none;}
+	.nav{
+		justify-content: space-between;
+	}
+	.nav a.action-btn {
+		display: block;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	.nav.responsive {
+		flex-direction: column;
+	}
+	
+	.nav.responsive a{
+		display: block;
+		animation-duration: 0.4s;
+		animation-name: fadein;
+	}
+
+}
+/* END NAVIGATION MENU STYLE */
+
+/* ANIMATIONS  */
+
+.flash-animation{
+	animation-name: flash;
+	animation-duration: 0.2s;
+}
+
+@keyframes flash {
+	0%{
+		background-color: initial;
+		transform: initial;
+	}
+	50%{
+		background-color: var(--tmpl-main-color-light);
+		transform: translateY(0.5em);
+	}
+	100%{
+		background-color: initial;
+		transform: initial;
+	}
+}
+
+@keyframes fadein {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+
+
+/* JUMBOTRON */
+
+.jumbotron {
+	background: var(--tmpl-main-color);
+
+	background-image: var(--tmpl-logo-text);
+	background-repeat: no-repeat;
+	background-position: bottom 0.5em right 50%;
+	background-size: 5.5em;
+}
+
+.jumbotron h1 {
+	display: block;
+	letter-spacing: 0.2em;
+	font-size: 2.1em;
+	margin: 0;
+	text-align: center;
+	text-transform: uppercase;
+	padding-top: 0.5em;
+	padding-bottom: 1em;  
+	font-weight: 500;
+}
+
+/* END JUMBOTRON */
+
+
+/* CONTENT STRUCTURE*/
+
+.content-body{
+	margin-top: 52px;
+	height: 100%;
+}
+
+/* A line of flex items */
+.flex-container {
+	display: flex;
+	/* flex-wrap: wrap; */
+}
+
+/* for flow into colum direction no matter what */
+.flex-container-col{
+	display: flex;
+	flex-direction: column;
+}
+
+/* an item in a line */
+.flex-item{
+	margin : 12px;
+	padding: 24px;
+	border-radius: 5px;
+	background-color: var(--tmpl-back-color-light);
+}
+
+@media screen and (max-width: 900px) {
+	.flex-item{
+		flex-grow: 1;
+	}
+	.flex-container {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+/* force an item to grow and take remaining space */
+.flex-grow {
+	flex-grow: 1;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.flex-shrink {
+	flex-shrink: 1;
+}
+
+
+/* FORMS */
+
+
+button {
+	background-color: var(--tmpl-main-color-dark);
+	border-style: solid;
+	border-width: 0px;
+	margin : 0.5em;
+	padding: 0.3em 1em 0.3em 1em;
+	outline-style: none;
+}
+
+button:active,button:target {
+	color: var(--tmpl-main-color-darker);
+	background-color: var(--tmpl-main-color-light);
+}
+
+@media (hover: hover) {
+    button:hover{
+		transform: scale(1.05);
+		background-color: var(--tmpl-main-color);
+		cursor: pointer;
+	}
+
+	button:active,button:target {
+		color: var(--tmpl-main-color-darker);
+		transform: scale(1.05);
+		background-color: var(--tmpl-main-color-light);
+	}
+
+}
+
+input,textarea,select {
+	background-color: var(--tmpl-back-color-dark);
+	border-color: var(--tmpl-main-color-dark);
+	border-width: 1px;
+	border-style: solid;
+	margin: 0.5em;
+	padding: 0.3em 1em 0.3em 1em;
+}
+
+select:focus{
+	outline-style: none;
+}
+
+input:focus, textarea:focus{
+	transform: scale(1.05);
+	outline-style: none;
+}
+
+/* tables */
+table{
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th,td{
+	border-color: var(--tmpl-main-color-dark);
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	text-align: left;
+	padding: 0.5em;
+}
+
+pre {
+	font-family: overpass-mono,mono;
+	font-size: 0.8em;
+	margin: 0.1em;
+}
+
+

@@ -1,0 +1,27 @@
+:root {
+	--tmpl-main-color-darker: #bf9700;
+	--tmpl-main-color-dark: #edbb00;
+	--tmpl-main-color: #ffc900;
+	--tmpl-main-color-light: #ffe480;
+	
+	--tmpl-back-color: #ededed;
+	--tmpl-back-color-dark: #f0f0f0;
+	--tmpl-back-color-light: #ffffff;
+	
+	--tmpl-text-color: black;
+
+	--tmpl-negative-color-darker: #997f7a;;
+	--tmpl-negative-color-dark: #e6bfb8;
+	--tmpl-negative-color:  #ffd4cc;
+	--tmpl-negative-color-light: #f2cac2;
+	
+	--tmpl-positive-color-darker: #85bd82;;
+	--tmpl-positive-color-dark: #a6eba2;;
+	--tmpl-positive-color: #b4ffb0;
+	--tmpl-positive-color-light: #d7f2df;
+
+	--tmpl-responsive-size: 900px;
+
+	--tmpl-logo: url("./../img/logo-black.svg");
+	--tmpl-logo-text: url("./../img/logo-and-text-black.svg");
+}	

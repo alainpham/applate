@@ -1,0 +1,14 @@
+.tracker-layout { align-items: flex-start; }
+.form-panel { flex: 0 1 28em; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; }
+.section-heading h2 { margin: 0; }
+.table-scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 58em; }
+th, td { border-bottom: 1px solid var(--tmpl-main-color-dark); padding: .65em .5em; text-align: left; vertical-align: top; }
+th { color: var(--tmpl-main-color-light); }
+td { max-width: 20em; overflow-wrap: anywhere; }
+td button { margin: 0 .25em .25em 0; }
+.danger { background-color: var(--tmpl-negative-color-dark); }
+.secondary { background-color: var(--tmpl-back-color-dark); }
+.error { color: var(--tmpl-negative-color-light); }
+#form-message, #table-message { min-height: 1.4em; }
