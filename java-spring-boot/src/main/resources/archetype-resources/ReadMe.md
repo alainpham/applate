@@ -48,6 +48,20 @@ docker buildx build \
     .
 ```
 
+example of expanded command
+
+```bash
+docker buildx build \
+    --load \
+    --build-arg PROJECT_ARTIFACTID=${artifactId} \
+    --build-arg PROJECT_VERSION=${version} \
+    --build-arg TEMURIN_IMAGE_VERSION=${temurin-image-version} \
+    --build-arg OPENTELEMETRY_VERSION=${opentelemetry-version} \
+    -f src/main/docker/Dockerfile \
+    -t ${container-registry}/${artifactId}:${version} \
+    .
+```
+
 #[[## Running container with docker ]]#
 
 With maven commands wrapping docker runs
