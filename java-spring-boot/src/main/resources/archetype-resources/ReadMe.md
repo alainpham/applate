@@ -48,7 +48,7 @@ docker buildx build \
     .
 ```
 
-example of expanded command
+example of expanded command and run
 
 ```bash
 docker buildx build \
@@ -60,6 +60,20 @@ docker buildx build \
     -f src/main/docker/Dockerfile \
     -t ${container-registry}/${artifactId}:${version} \
     .
+
+docker run -d --rm \
+    --name ${artifactId} \
+    --hostname ${artifactId} \
+    --network ${docker-network} \
+    -e OTEL_JAVAAGENT_ENABLED=true \
+    -l traefik.enable=true \
+    -l traefik.http.services.${artifactId}.loadbalancer.server.port=8080 \
+    -l traefik.http.services.${artifactId}.loadbalancer.server.scheme=http \
+    -l traefik.http.routers.${artifactId}.service=${artifactId} \
+    -l traefik.http.routers.${artifactId}.entrypoints=https \
+    -l traefik.http.routers.${artifactId}.tls=true \
+    -l 'traefik.http.routers.${artifactId}.rule=Host(`${artifactId}.${docker-root-domain}`)' \
+    ${container-registry}/${artifactId}:${version}
 ```
 
 #[[## Running container with docker ]]#

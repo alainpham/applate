@@ -25,6 +25,6 @@ public class Application implements WebSocketConfigurer{
 		
 		// Expose endpoint and add Handler. Wildcard allowed origins to support COORS
 		// registry.addHandler(new WebsocketTextHandler(), "/websocket").setAllowedOrigins("*");
-		registry.addHandler(webSocketTextHandler, "/websocket");
+		registry.addHandler(webSocketTextHandler, "/websocket").setAllowedOriginPatterns("*");
 	}
 }
