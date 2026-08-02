@@ -1,4 +1,3 @@
-const fs = require('node:fs');
 const path = require('node:path');
 const { readYamlList, writeYamlList } = require('./yaml-store');
 
@@ -92,6 +91,19 @@ function createArtifactStore(filePath = process.env.ARTIFACTS_FILE || path.join(
       const index = rows.findIndex((artifact) => artifact.id === id);
       if (index === -1) return null;
       const updated = { ...rows[index], ...values, ...emptyComputedFields() };
+      save(rows.map((artifact, rowIndex) => rowIndex === index ? updated : artifact));
+      return updated;
+    },
+    updateComputed(id, computed) {
+      const rows = load();
+      const index = rows.findIndex((artifact) => artifact.id === id);
+      if (index === -1) return null;
+      const updated = { ...rows[index] };
+      for (const field of COMPUTED_FIELDS) {
+        if (Object.prototype.hasOwnProperty.call(computed, field)) {
+          updated[field] = computed[field] == null ? null : String(computed[field]);
+        }
+      }
       save(rows.map((artifact, rowIndex) => rowIndex === index ? updated : artifact));
       return updated;
     },

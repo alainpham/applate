@@ -2,6 +2,8 @@
 .form-panel { flex: 0 1 28em; }
 .section-heading { display: flex; align-items: center; justify-content: space-between; }
 .section-heading h2 { margin: 0; }
+.refresh-progress { display: flex; align-items: center; gap: .75em; margin: .75em 0; }
+.refresh-progress progress { flex: 1; min-width: 10em; accent-color: var(--tmpl-main-color-light); }
 .table-scroll { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; min-width: 58em; }
 th, td { border-bottom: 1px solid var(--tmpl-main-color-dark); padding: .65em .5em; text-align: left; vertical-align: top; }

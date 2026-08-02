@@ -9,7 +9,9 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
+    "@xmldom/xmldom": "^0.8.11",
     "express": "5.2.1",
-    "ws": "8.21.1"
+    "ws": "8.21.1",
+    "xpath": "^0.0.34"
   }
 }
