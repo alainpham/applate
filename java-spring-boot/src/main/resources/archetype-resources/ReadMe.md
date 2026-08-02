@@ -59,7 +59,7 @@ mvn exec:exec@runotel
 mvn exec:exec@run
 
 # with otel in background
-mvn exec:exec@runotel
+mvn exec:exec@runoteld
 # without otel in background
 mvn exec:exec@rund
 ```
