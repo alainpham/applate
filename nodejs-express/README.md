@@ -1,6 +1,6 @@
-# project-service-name
+# nodejs-express
 
-This README provides instructions to build and run the project-service-name using Docker.
+This README provides instructions to build and run the nodejs-express using Docker.
 
 ## env vars for otel
 
@@ -11,7 +11,7 @@ export OTEL_LOGS_EXPORTER="otlp"
 export OTEL_TRACES_EXPORTER="otlp"
 export OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"
 export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
-export OTEL_SERVICE_NAME="project-service-name"
+export OTEL_SERVICE_NAME="nodejs-express"
 export NODE_OPTIONS="--require @opentelemetry/auto-instrumentations-node/register"
 ```
 
@@ -24,23 +24,34 @@ export NODE_OPTIONS="--require @opentelemetry/auto-instrumentations-node/registe
 
 ```sh
 npm install 
-node server/server.js
+npm start
 ```
+
+To auto-restart the server whenever a file under `server/` or `public/` changes,
+and auto-reload the browser tab with it:
+
+```sh
+npm run dev
+```
+
+The browser reload uses a `/__livereload` SSE endpoint plus a small script
+injected into served HTML. Both are gated behind `LIVERELOAD=1`, which only
+`npm run dev` sets — `npm start` and the container image are untouched.
 
 
 ## Building the Docker Image
 
-To build the Docker image for the project-service-name, run the following command:
+To build the Docker image for the nodejs-express, run the following command:
 
 ```sh
-docker rmi alainpham/project-service-name
-docker build -t alainpham/project-service-name .
+docker rmi alainpham/nodejs-express
+docker build -t alainpham/nodejs-express .
 ```
 
 ## Pushing to repository
 
 ```sh
-docker push alainpham/project-service-name
+docker push alainpham/nodejs-express
 ```
 
 ## Running the Docker Container
@@ -48,7 +59,7 @@ docker push alainpham/project-service-name
 To run the Docker container, use the following command:
 
 ```sh
-docker run --rm -p 8080:8080 --name project-service-name alainpham/project-service-name
+docker run --rm -p 8080:8080 --name nodejs-express alainpham/nodejs-express
 ```
 
 ## Stopping the Docker Container
@@ -56,7 +67,7 @@ docker run --rm -p 8080:8080 --name project-service-name alainpham/project-servi
 To stop the running container, use the following command:
 
 ```sh
-docker stop project-service-name
+docker stop nodejs-express
 ```
 
 ## Removing the Docker Container
@@ -64,7 +75,7 @@ docker stop project-service-name
 To remove the stopped container, use the following command:
 
 ```sh
-docker rm project-service-name
+docker rm nodejs-express
 ```
 
 ## Deploy on kube

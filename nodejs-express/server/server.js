@@ -4,14 +4,18 @@ const path = require("path");
 const fs = require("fs");
 const api = require('@opentelemetry/api');
 const axios = require('axios');
+const liveReload = require('./livereload');
 
 // add the prometheus middleware to all routes
 const app = express();
 const PORT = 8080;
+const PUBLIC_DIR = path.join(__dirname, "../public");
 
 // Middleware
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "../public"))); // Serve static files
+
+liveReload.attach(app, PUBLIC_DIR); // dev only, no-op unless LIVERELOAD=1
+app.use(express.static(PUBLIC_DIR)); // Serve static files
 
 
 app.get("/ping", (req, res) => {
@@ -28,6 +32,7 @@ server = app.listen(PORT, () => {
 //gracefull shutdown
 process.on('SIGTERM', () => {
     console.log('SIGTERM signal received.');
+    liveReload.closeStreams();
     server.close(() => {
         console.log('Closed out remaining connections');
         // Additional cleanup tasks go here
@@ -36,6 +41,7 @@ process.on('SIGTERM', () => {
 
 process.on('SIGINT', () => {
     console.log('SIGINT signal received.');
+    liveReload.closeStreams();
     server.close(() => {
         console.log('Closed out remaining connections');
         // Additional cleanup tasks go here

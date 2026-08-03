@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server/server.js",
+    "dev": "LIVERELOAD=1 node --watch --watch-path=./server --watch-path=./public server/server.js"
   },
   "keywords": [],
   "author": "",
