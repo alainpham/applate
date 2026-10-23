@@ -49,7 +49,8 @@ rm ~/.m2/repository/net/alainpham/applate/nodejs-express/nodejs-express.zip
 fi
 
 mkdir -p ~/.m2/repository/net/alainpham/applate/nodejs-express/
-zip -r ~/.m2/repository/net/alainpham/applate/nodejs-express/nodejs-express.zip $SCRIPT_DIR/../../nodejs-express -x '*node_modules*'
+# zip from the repo root so entries are stored as nodejs-express/... instead of $SCRIPT_DIR/../../nodejs-express/...
+(cd $SCRIPT_DIR/../.. && zip -r ~/.m2/repository/net/alainpham/applate/nodejs-express/nodejs-express.zip nodejs-express -x '*node_modules*')
 
 if [ -f /usr/local/bin/njsexpress ]; then
 sudo rm /usr/local/bin/njsexpress

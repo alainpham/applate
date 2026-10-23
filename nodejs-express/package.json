@@ -11,11 +11,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@opentelemetry/api": "1.9.1",
-    "@opentelemetry/auto-instrumentations-node": "0.79.0",
-    "axios": "1.19.0",
-    "body-parser": "2.3.0",
+    "axios": "1.20.0",
+    "body-parser": "2.4.0",
     "cors": "2.8.6",
-    "express": "5.2.1"
+    "express": "5.3.0",
+    "pino": "10.4.0"
   }
 }

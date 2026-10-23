@@ -8,6 +8,7 @@
 
 const path = require("path");
 const fs = require("fs");
+const logger = require("./logger");
 
 const ENABLED = process.env.LIVERELOAD === "1";
 const BOOT_ID = String(Date.now());
@@ -58,7 +59,7 @@ function attach(app, publicDir) {
         );
     });
 
-    console.log("Live reload enabled");
+    logger.info("Live reload enabled");
 }
 
 // Open SSE streams would otherwise keep server.close() from ever completing,
