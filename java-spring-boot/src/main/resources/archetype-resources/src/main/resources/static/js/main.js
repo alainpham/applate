@@ -1,66 +1,67 @@
-//initiating the page
-$(document).ready(
-    function () {
+//initiating the page (scripts are loaded at the end of body, the DOM is ready)
 
-        //loading the navbar
-        $('#navbar').load('partials/navbar.html');
+// loading theme content
+fetch('/uiconfig')
+    .then(function (response) { return response.json(); })
+    .then(function (data) {
+        document.documentElement.dataset.theme = data.theme;
+        try { localStorage.setItem('theme', data.theme); } catch (e) {}
+    });
+
+//loading the navbar, then the web socket connection that updates its status
+fetch('partials/navbar.html')
+    .then(function (response) { return response.text(); })
+    .then(function (html) {
+        document.getElementById('navbar').innerHTML = html;
         console.log('navbar loaded');
+    })
+    .finally(connectSocket);
 
-        // loading theme content
-        $.get('/uiconfig', function (data) {
-            var link = $('<link>', {
-                rel: 'stylesheet',
-                type: 'text/css',
-                href: 'css/' + data.theme + '.css'
-            });
-            $('head').append(link);
-        });
-
-        //web socket connection
-        connectSocket()
-    }
-);
+// delegated event handler, works for elements added after page load
+// handler receives the matched element and the event
+function on(eventType, selector, handler) {
+    document.addEventListener(eventType, function (event) {
+        var element = event.target.closest(selector);
+        if (element) {
+            handler(element, event);
+        }
+    });
+}
 
 // click on hamburger show menu
-$(document).on(
-    'click', 
-    '#menubtn', 
-    function () {
-        $('#nav').toggleClass('responsive');
-    }
-);
+on('click', '#menubtn', function () {
+    document.getElementById('nav').classList.toggle('responsive');
+});
 
 // connecting to the websocket
 function connectSocket() {
-    // receiving functions 
-    var server = ((window.location.protocol === 'https:') ? 'wss://' : 'ws://') + window.location.hostname + ":" + window.location.port + "/websocket";
+    // receiving functions
+    var server = ((window.location.protocol === 'https:') ? 'wss://' : 'ws://') + window.location.host + "/websocket";
     var socket = new WebSocket(server);
     socket.onmessage = processSocketMsg;
 
     socket.onopen = function () {
         console.log("socket connection ok")
-        var $logo = $('#logo');
-        if ($logo.length) {
-            $logo.removeClass('negative');
-            $('#status').addClass('hidden');
-        }
+        setServerStatus(true);
     }
     socket.onclose = function (e) {
-        console.log('Socket is closed. Reconnect will be attempted in 2 second.', e.reason);
-        var $logo = $('#logo');
-        if ($logo.length) {
-            $logo.addClass('negative');
-            $('#status').removeClass('hidden');
-        }
-        setTimeout(function () {
-            connectSocket();
-        }, 3000);
+        console.log('Socket is closed. Reconnect will be attempted in 3 seconds.', e.reason);
+        setServerStatus(false);
+        setTimeout(connectSocket, 3000);
     };
 
     socket.onerror = function (err) {
         console.error('Socket encountered error: ', err.message, 'Closing socket');
         socket.close();
     };
+}
+
+function setServerStatus(online) {
+    var logo = document.getElementById('logo');
+    if (logo) {
+        logo.classList.toggle('negative', !online);
+        document.getElementById('status').classList.toggle('hidden', online);
+    }
 }
 
 // processing socket messages
@@ -72,101 +73,95 @@ function processSocketMsg(event) {
 
 
 function formAsJson(formid) {
-    var data = {};
-    $.each(
-        $(formid).serializeArray(), 
-        function () {
-            data[this.name] = this.value;
-        }
-    );
-    return data;
+    return Object.fromEntries(new FormData(document.querySelector(formid)));
+}
+
+// create an element with optional text content
+function el(tag, text) {
+    var element = document.createElement(tag);
+    if (text !== undefined) {
+        element.textContent = text;
+    }
+    return element;
 }
 
 
 //table manupulation
 
 function populateTableHeader(tableId, dataTable,type) {
-    var table = $(tableId);
-    if (table.find('thead').length === 0 && dataTable.length > 0) {
+    var table = document.querySelector(tableId);
+    if (!table.tHead && dataTable.length > 0) {
         var headers = Object.keys(dataTable[0]);
-        var thead = $('<thead></thead>');
-        var tr = $('<tr></tr>');
+        var tr = table.createTHead().insertRow();
         headers.forEach(
             function (header) {
-                tr.append($('<th></th>').text(header));
+                tr.append(el('th', header));
             }
         );
         var additionalHeaders = conditionalHeaders(type);
-        console.log('additional headers: ' + additionalHeaders);
-        tr.append(additionalHeaders);
-        thead.append(tr);
-        table.append(thead);
+        if (additionalHeaders != null) {
+            console.log('additional headers: ', additionalHeaders);
+            tr.append(additionalHeaders);
+        }
     }
 }
 
-function populateTableBody(tableId, dataTable) {
-    var table = $(tableId);
-    var tbody = table.find('tbody');
+function populateTableBody(tableId) {
+    var table = document.querySelector(tableId);
     //if there is no tbody create one
-    if (tbody.length === 0) {
-        tbody = $('<tbody></tbody>');
-        table.append(tbody);
-    }
-    return tbody;
+    return table.tBodies[0] || table.createTBody();
 }
 
 function appendToTable(tableId, dataTable,type) {
     populateTableHeader(tableId, dataTable,type);
-    var tbody = populateTableBody(tableId, dataTable);
+    var tbody = populateTableBody(tableId);
     //for eah element in the data table
     dataTable.forEach(
         //create a row
         function (data) {
-            var row = $('<tr></tr>');
-            row.attr('name', data.id);
-            tbody.append(row);
-            populateCells(tbody,row, data, type);
+            var row = tbody.insertRow();
+            row.setAttribute('name', data.id);
+            populateCells(row, data, type);
     });
 }
 
 
 function upsertToTable(tableId, dataTable,type) {
-    
+
     populateTableHeader(tableId, dataTable,type);
-    var tbody = populateTableBody(tableId, dataTable);
+    var tbody = populateTableBody(tableId);
 
     //for each element in the data table
     dataTable.forEach(
         //create a row
         function (data) {
             //look if row exists
-            var row = tbody.find('tr[name="' + data.id + '"]');
-            if (row.length === 0) { //row does not
-                var row = $('<tr></tr>');
-                row.attr('name', data.id);
-                tbody.append(row);
+            var row = tbody.querySelector('tr[name="' + CSS.escape(String(data.id)) + '"]');
+            if (row == null) { //row does not
+                row = tbody.insertRow();
+                row.setAttribute('name', data.id);
             }
             else { //row exists
                 console.log('row exists');
-                row.empty();
+                row.replaceChildren();
             }
-            populateCells(tbody,row, data, type);
+            populateCells(row, data, type);
         }
     );
 }
 
-function populateCells(tbody,row, data, type) {
+function populateCells(row, data, type) {
     //for each key in the data row create a cell
     var additionalCells = [];
     Object.keys(data).forEach(
         function (key) {
-            var cell = $('<td></td>').text(data[key]);
+            var cell = el('td', data[key]);
             row.append(cell);
-            
+
             //conditional formatting
             var conditionalClass = conditionalFormatting(type, key, data[key]);
             if (conditionalClass != null) {
-                cell.addClass(conditionalClass);
+                cell.classList.add(conditionalClass);
             }
 
             //conditional actions
@@ -177,23 +172,19 @@ function populateCells(tbody,row, data, type) {
 
         }
     );
-    for (var i = 0; i < additionalCells.length; i++) {
-        row.append(additionalCells[i]);
-    }
+    row.append.apply(row, additionalCells);
     flashAnimate(row);
 }
 
-function showRawData(element,data){
+function showRawData(selector,data){
     const currentDate = new Date();
-    var msg = currentDate + '\n\n' + JSON.stringify(data,null,2);
-    var el=$(element);
-    el.empty();
-    el.text(msg);
-    flashAnimate(el);
+    var element = document.querySelector(selector);
+    element.textContent = currentDate + '\n\n' + JSON.stringify(data,null,2);
+    flashAnimate(element);
 }
 
-function flashAnimate(jqueryElement){
-    jqueryElement.removeClass("flash-animation");
-    void jqueryElement[0].offsetWidth;
-    jqueryElement.addClass("flash-animation");
+function flashAnimate(element){
+    element.classList.remove("flash-animation");
+    void element.offsetWidth;
+    element.classList.add("flash-animation");
 }

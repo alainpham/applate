@@ -6,8 +6,15 @@
     <title>${artifactId}</title>
     <meta name="description" content="${artifactId} interface">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- apply the last known theme before first paint, main.js refreshes it from /uiconfig -->
+    <script>
+        try {
+            var theme = localStorage.getItem('theme');
+            if (theme) document.documentElement.dataset.theme = theme;
+        } catch (e) {}
+    </script>
+    <link rel="preload" href="fonts/overpass.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="css/main.css" />
-    <script src="js/framework/jquery-3.7.1.min.js"></script>
 
 </head>
 
@@ -15,53 +22,48 @@
     <div id="navbar"></div>
     <div class="content-body">
         <!-- PUT YOUR CONTENT HERE -->
-        <div class="jumbotron"  >
+        <div class="jumbotron">
             <h1>${artifactId} interface</h1>
         </div>
         <div class="flex-container">
-            <div class="flex-item " >
-                <form id="data-form" class="flex-container-col">
-                    <label>Id</label>
-                    <input type="text" name="id" value="xx" placeholder="Id">
-                    <label>Name</label>
-                    <input type="text" name="name" value="John" placeholder="Your name">
-                    <label>First Name</label>
-                    <input type="text" name="firstName" value="Doe" placeholder="Your first name">
-                    <label>Your vote</label>
-                    <select name="vote">
+            <div class="flex-item flex-fixed">
+                <form id="data-form" class="form-grid">
+                    <label for="f-id">Id</label>
+                    <input id="f-id" type="text" name="id" value="xx" placeholder="Id">
+                    <label for="f-name">Name</label>
+                    <input id="f-name" type="text" name="name" value="John" placeholder="Your name">
+                    <label for="f-firstName">First Name</label>
+                    <input id="f-firstName" type="text" name="firstName" value="Doe" placeholder="Your first name">
+                    <label for="f-vote">Your vote</label>
+                    <select id="f-vote" name="vote">
                         <option value="yes">Yes</option>
                         <option value="no">No</option>
                     </select>
-                    <label>Message content</label>
-                    <textarea name="textArea"></textarea>
+                    <label for="f-textArea">Message content</label>
+                    <textarea id="f-textArea" name="textArea"></textarea>
+                    <span></span>
+                    <div><button id="send-button" type="submit">send</button></div>
                 </form>
-                <button id="send-button">send</button>
             </div>
             <div class="flex-item flex-grow">
-                <div class="flex-container">
-                    <h2>State Table</h2>
-                </div>
+                <h2>State Table</h2>
                 <table id="state-table">
                 </table>
             </div>
         </div>
         <div class="flex-container">
-            <div class="flex-item flex-grow flex-container-col">
-                <div class="flex-container">
-                    <h2>Log messages</h2>
-                </div>
+            <div class="flex-item flex-grow">
+                <h2>Log messages</h2>
                 <table id="log-table">
                 </table>
             </div>
-            <div class="flex-item flex-grow">
+            <div class="flex-item">
                 <h2>Last message</h2>
                 <pre id="messages">Basic Messages Will show here</pre>
             </div>
         </div>
-        <div class="flex-container">
-        </div>
+        <!-- END PUT YOUR CONTENT HERE -->
     </div>
-    <!-- END PUT YOUR CONTENT HERE -->
 
     <!-- main techical functions -->
     <script src="js/main.js"></script>
