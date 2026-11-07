@@ -1,52 +1,52 @@
 - id: 400
-  currentVersion: "4.0.5"
-  latestVersion: "4.1.0"
-  latestAndGreatest: "4.1.0"
+  currentVersion: null
+  latestVersion: null
+  latestAndGreatest: null
   project: "java-spring-boot"
   currentVersionResource: "https://raw.githubusercontent.com/alainpham/applate/master/java-spring-boot/src/main/resources/META-INF/maven/archetype-metadata.xml"
   currentVersionExpression: "xpath://*:requiredProperty[@key='spring-boot-version']/*:defaultValue/text()"
   coordinates: "mvn:org.springframework.boot:spring-boot-dependencies"
   latestVersionFilter: "^4.*"
 - id: 401
-  currentVersion: "2.26.1"
-  latestVersion: "2.30.0"
-  latestAndGreatest: "2.30.0"
+  currentVersion: null
+  latestVersion: null
+  latestAndGreatest: null
   project: "java-spring-boot"
   currentVersionResource: "https://raw.githubusercontent.com/alainpham/applate/master/java-spring-boot/src/main/resources/META-INF/maven/archetype-metadata.xml"
   currentVersionExpression: "xpath://*:requiredProperty[@key='opentelemetry-version']/*:defaultValue/text()"
   coordinates: "mvn:io.opentelemetry.javaagent:opentelemetry-javaagent"
   latestVersionFilter: "^2.*"
 - id: 402
-  currentVersion: "3.0.2"
-  latestVersion: "3.1.0"
-  latestAndGreatest: "3.1.0"
+  currentVersion: null
+  latestVersion: null
+  latestAndGreatest: null
   project: "java-spring-boot"
   currentVersionResource: "https://raw.githubusercontent.com/alainpham/applate/master/java-spring-boot/src/main/resources/META-INF/maven/archetype-metadata.xml"
   currentVersionExpression: "xpath://*:requiredProperty[@key='springdoc-openapi-version']/*:defaultValue/text()"
   coordinates: "mvn:org.springdoc:springdoc-openapi-starter-webmvc-ui"
   latestVersionFilter: "^3.*"
 - id: 403
-  currentVersion: "3.6.3"
-  latestVersion: "3.6.3"
-  latestAndGreatest: "3.6.3"
+  currentVersion: null
+  latestVersion: null
+  latestAndGreatest: null
   project: "java-spring-boot"
   currentVersionResource: "https://raw.githubusercontent.com/alainpham/applate/master/java-spring-boot/src/main/resources/META-INF/maven/archetype-metadata.xml"
   currentVersionExpression: "xpath://*:requiredProperty[@key='exec-maven-plugin-version']/*:defaultValue/text()"
   coordinates: "mvn:org.codehaus.mojo:exec-maven-plugin"
   latestVersionFilter: "^3.*"
 - id: 404
-  currentVersion: "3.15.0"
-  latestVersion: "3.15.0"
-  latestAndGreatest: "4.0.0-beta-4"
+  currentVersion: null
+  latestVersion: null
+  latestAndGreatest: null
   project: "java-spring-boot"
   currentVersionResource: "https://raw.githubusercontent.com/alainpham/applate/master/java-spring-boot/src/main/resources/META-INF/maven/archetype-metadata.xml"
   currentVersionExpression: "xpath://*:requiredProperty[@key='maven-compiler-plugin-version']/*:defaultValue/text()"
   coordinates: "mvn:org.apache.maven.plugins:maven-compiler-plugin"
   latestVersionFilter: "^3.*"
 - id: 405
-  currentVersion: "17.0.18_8-jre"
-  latestVersion: "25.0.3_9-jre"
-  latestAndGreatest: "25.0.3_9-jre"
+  currentVersion: null
+  latestVersion: "25.0.5_8-jre"
+  latestAndGreatest: "25.0.5_8-jre"
   project: "java-spring-boot"
   currentVersionResource: "https://raw.githubusercontent.com/alainpham/applate/master/java-spring-boot/src/main/resources/META-INF/maven/archetype-metadata.xml"
   currentVersionExpression: "xpath://*:requiredProperty[@key='temurin-image-version']/*:defaultValue/text()"
