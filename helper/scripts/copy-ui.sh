@@ -1,10 +1,19 @@
 #!/bin/sh
-rm -r ../../java-spring-boot/src/main/resources/archetype-resources/src/main/resources/static/*
-cp -R ../js-front/static/* ../../java-spring-boot/src/main/resources/archetype-resources/src/main/resources/static/
+set -eu
 
-rm -r ../../java-spring-boot-camel/src/main/resources/archetype-resources/src/main/resources/static/*
-cp -R ../js-front/static/* ../../java-spring-boot-camel/src/main/resources/archetype-resources/src/main/resources/static/
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+PROJECT_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/../.." && pwd)
+SOURCE_DIR="$PROJECT_ROOT/nodejs-express/public"
 
-rm -r ../../java-quarkus-camel/src/main/resources/archetype-resources/src/main/resources/META-INF/resources/*
-cp -R ../js-front/static/* ../../java-quarkus-camel/src/main/resources/archetype-resources/src/main/resources/META-INF/resources/
+# Validate the source before replacing any template assets.
+[ -f "$SOURCE_DIR/index.html" ]
 
+for destination in \
+    "$PROJECT_ROOT/java-spring-boot/src/main/resources/archetype-resources/src/main/resources/static" \
+    "$PROJECT_ROOT/java-spring-boot-camel/src/main/resources/archetype-resources/src/main/resources/static" \
+    "$PROJECT_ROOT/java-quarkus-camel/src/main/resources/archetype-resources/src/main/resources/META-INF/resources"
+do
+    rm -rf -- "$destination"
+    mkdir -p -- "$destination"
+    cp -R "$SOURCE_DIR/." "$destination/"
+done

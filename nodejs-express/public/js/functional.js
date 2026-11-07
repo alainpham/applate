@@ -2,7 +2,7 @@ var globalStore = {};
 
 // button clicks
 on('click', '#quickpingbtn', function () {
-    fetch('${svc-ping-path}')
+    fetch('/ping')
         .then(function (response) { return response.text(); })
         .then(function (response) {
             console.log(response);
@@ -13,7 +13,7 @@ on('click', '#quickpingbtn', function () {
 //send form (send-button or enter key)
 on('submit', '#data-form', function (form, event) {
     event.preventDefault();
-    fetch('${svc-send-msg-path}', {
+    fetch('/send-msg', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formAsJson('#data-form'))

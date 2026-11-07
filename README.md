@@ -87,3 +87,17 @@ or here : https://odysee.com/@alainpham:8/apache-camel-monitoring-prometheus-gra
 The dashboard that you can import can be found [here](observability/dashboards/infra/k8s-overview.json)
 
 ![K8S Overview Dashboard](assets/k8s.png)
+### Shared web UI
+
+`nodejs-express/public` is the source for the identical frontend shipped in
+Spring Boot, Camel Spring Boot, Camel Quarkus, and Express. Run
+`sh helper/scripts/copy-ui.sh` after editing it. Frontend assets are
+copied unchanged and excluded from Maven archetype filtering. Develop the UI
+with `npm run dev` in `nodejs-express`; the copy script works from any directory.
+
+All web templates expose `GET /ping`, `POST /send-msg`, `GET /v3/api-docs`,
+`GET /swagger-ui.html`, `GET /uiconfig`, and WebSocket `/websocket`.
+`/uiconfig` supplies the application name and theme; endpoint paths are fixed.
+Camel templates additionally expose their REST DSL specification at
+`/camel-openapi`. The shared navbar links to the application OpenAPI document.
+Express serves Swagger UI from its locally installed `swagger-ui-dist` package.

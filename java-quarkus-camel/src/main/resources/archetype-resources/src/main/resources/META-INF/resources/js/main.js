@@ -4,6 +4,11 @@
 fetch('/uiconfig')
     .then(function (response) { return response.json(); })
     .then(function (data) {
+        if (data.name) {
+            document.title = data.name;
+            document.querySelector(".jumbotron h1").textContent = data.name + " interface";
+            document.querySelector('meta[name="description"]').content = data.name + " interface";
+        }
         document.documentElement.dataset.theme = data.theme;
         try { localStorage.setItem('theme', data.theme); } catch (e) {}
     });

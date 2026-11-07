@@ -22,7 +22,7 @@ public class RestConfigurator extends RouteBuilder {
 		.apiContextRouteId("api-docs")
 		.component("platform-http")
 		.bindingMode(RestBindingMode.json)
-		.apiContextPath("/api-docs")
+		.apiContextPath("/camel-openapi")
 		.apiProperty("cors", "true")
 		.apiProperty("api.title", environment.getProperty("camel.springboot.name"))
 		.apiProperty("api.version", environment.getProperty("camelrest.apiversion"))

@@ -37,21 +37,6 @@
     </requiredProperty>
     
     <!-- app vars -->
-    <requiredProperty key="svc-ping-path">
-      <defaultValue>/ping</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="svc-definition-path">
-      <defaultValue>/v3/api-docs</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="svc-camel-definition-path">
-      <defaultValue>/v3/api-docs</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="svc-send-msg-path">
-      <defaultValue>/send-msg</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="swagger-ui-path">
-      <defaultValue>/swagger-ui.html?url=/v3/api-docs</defaultValue>
-    </requiredProperty>
     <!-- build vars -->
     <requiredProperty key="kube-otlp-endpoint">
       <defaultValue>http://grafana-k8s-monitoring-alloy-receiver.default.svc.cluster.local:4318</defaultValue>
@@ -97,6 +82,7 @@
         <include>**/*</include>
       </includes>
       <excludes>
+        <exclude>**/static/**</exclude>
         <exclude>**/framework/**</exclude>
         <exclude>**/favicon.ico</exclude>
       </excludes>
@@ -104,6 +90,7 @@
     <fileSet filtered="false" encoding="UTF-8">
       <directory>src/main/resources</directory>
       <includes>
+        <include>**/static/**</include>
         <include>**/framework/**</include>
         <include>**/favicon.ico</include>
       </includes>

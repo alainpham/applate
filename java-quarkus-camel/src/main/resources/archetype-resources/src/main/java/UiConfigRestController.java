@@ -16,6 +16,7 @@ public class UiConfigRestController {
 
     public UiConfigRestController() {
         uiConfig = new TreeMap<String,String>();
+        uiConfig.put("name", ConfigProvider.getConfig().getValue("quarkus.application.name", String.class));
         uiConfig.put("theme", ConfigProvider.getConfig().getValue("theme",String.class));
     }
 

@@ -14,6 +14,7 @@ public class UiConfigRestController {
 
     public UiConfigRestController(Environment environment) {
         uiConfig = new TreeMap<String,String>();
+        uiConfig.put("name", environment.getProperty("spring.application.name"));
         uiConfig.put("theme", environment.getProperty("theme"));
     }
     

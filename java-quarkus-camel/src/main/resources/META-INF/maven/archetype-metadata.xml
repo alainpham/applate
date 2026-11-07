@@ -29,23 +29,6 @@
     <requiredProperty key="exec-maven-plugin-version">
       <defaultValue>3.3.0</defaultValue>
     </requiredProperty>
-    <!-- app vars -->
-    <requiredProperty key="svc-ping-path">
-      <defaultValue>/ping</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="svc-definition-path">
-      <defaultValue>/q/openapi</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="svc-camel-definition-path">
-      <defaultValue>/camel-openapi</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="svc-send-msg-path">
-      <defaultValue>/send-msg</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="swagger-ui-path">
-      <defaultValue>/q/swagger-ui</defaultValue>
-    </requiredProperty>
-    
     <!-- build vars -->
     <requiredProperty key="otlp-endpoint">
       <defaultValue>http://grafana-k8s-monitoring-grafana-agent.agents.svc.cluster.local:4317</defaultValue>
@@ -83,6 +66,7 @@
         <include>**/*</include>
       </includes>
       <excludes>
+        <exclude>**/META-INF/resources/**</exclude>
         <exclude>**/framework/**</exclude>
         <exclude>**/favicon.ico</exclude>
         <exclude>**/camel-spring.xsd</exclude>
@@ -91,6 +75,7 @@
     <fileSet filtered="false" encoding="UTF-8">
       <directory>src/main/resources</directory>
       <includes>
+        <include>**/META-INF/resources/**</include>
         <include>**/framework/**</include>
         <include>**/favicon.ico</include>
         <include>**/camel-spring.xsd</include>
