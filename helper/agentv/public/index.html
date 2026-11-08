@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>agentv</title>
+    <meta name="description" content="Track dependency versions across the applate projects">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        try {
+            var theme = localStorage.getItem('theme');
+            if (theme) document.documentElement.dataset.theme = theme;
+        } catch (e) {}
+    </script>
+    <link rel="preload" href="fonts/overpass.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div id="navbar"></div>
+    <div class="content-body">
+        <div class="jumbotron"><h1>agentv</h1></div>
+        <main class="flex-container flex-container-col">
+            <section class="flex-item flex-fixed">
+                <h2>Applate dependencies</h2>
+                <p>Current project versions and available releases from ecosyste.ms.</p>
+                <button id="check-button" type="button">Check for updates</button>
+                <p id="check-status" role="status" aria-live="polite">Loading dependencies…</p>
+                <p id="check-error" role="alert" class="hidden negative"></p>
+                <div class="flex-container" aria-label="Dependency summary">
+                    <p><strong id="total-count">0</strong> Dependencies</p>
+                    <p><strong id="update-count">0</strong> Updates available</p>
+                    <p><strong id="current-count">0</strong> Current or ahead</p>
+                    <p><strong id="error-count">0</strong> Need attention</p>
+                </div>
+                <div class="flex-container">
+                    <div class="form-grid">
+                        <label for="project-filter">Project</label>
+                        <select id="project-filter"><option value="">All projects</option></select>
+                    </div>
+                    <div class="form-grid">
+                        <label for="status-filter">Status</label>
+                        <select id="status-filter">
+                            <option value="">All statuses</option>
+                            <option value="update-available">Update available</option>
+                            <option value="up-to-date">Up to date</option>
+                            <option value="ahead">Ahead of index</option>
+                            <option value="error">Error</option>
+                            <option value="no-matching-version">No matching release</option>
+                            <option value="unchecked">Not checked</option>
+                        </select>
+                    </div>
+                    <div class="form-grid">
+                        <label for="search-filter">Search</label>
+                        <input id="search-filter" type="search" placeholder="Package or project">
+                    </div>
+                </div>
+                <p><a href="/api/config.yaml">Download YAML</a></p>
+            </section>
+            <section class="flex-item flex-fixed">
+                <table id="dependencies-table">
+                    <caption>Tracked dependencies and update status</caption>
+                    <thead><tr><th scope="col">Project / source</th><th scope="col">Dependency</th><th scope="col">Current</th><th scope="col">Latest matching</th><th scope="col">Latest and greatest</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+                <p id="empty-state" class="hidden">No dependencies match these filters.</p>
+            </section>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/functional.js"></script>
+</body>
+</html>

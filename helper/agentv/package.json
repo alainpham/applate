@@ -1,17 +1,29 @@
 {
   "name": "agentv",
   "version": "1.0.0",
-  "private": true,
-  "description": "YAML-backed Maven and Docker artifact version tracker",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "start": "node server/server.js",
+    "dev": "LIVERELOAD=1 node --watch --watch-path=./server --watch-path=./public server/server.js",
+    "check": "node server/check.js",
+    "test": "node --test"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Track applate dependency versions with YAML configuration and ecosyste.ms",
+  "engines": {"node": ">=22"},
   "dependencies": {
-    "@xmldom/xmldom": "0.9.12",
+    "@xmldom/xmldom": "^0.9.12",
+    "axios": "1.21.0",
+    "body-parser": "2.4.0",
+    "cors": "2.8.6",
     "express": "5.3.0",
-    "ws": "8.22.0",
-    "xpath": "0.0.35"
+    "pino": "10.4.0",
+    "semver": "^7.8.6",
+    "swagger-ui-dist": "5.34.1",
+    "ws": "8.22.1",
+    "xpath": "^0.0.36",
+    "yaml": "^2.9.1"
   }
 }

@@ -13,21 +13,21 @@
       <defaultValue>17</defaultValue>
     </requiredProperty>
     <requiredProperty key="compiler-plugin-version">
-      <defaultValue>3.13.0</defaultValue>
+      <defaultValue>3.16.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="quarkus-version">
-      <defaultValue>3.10.0</defaultValue>
+      <defaultValue>3.40.1.1</defaultValue>
     </requiredProperty>
     
     <requiredProperty key="surefire-plugin-version">
-      <defaultValue>3.2.5</defaultValue>
+      <defaultValue>3.6.1</defaultValue>
     </requiredProperty>
     
     <requiredProperty key="temurin-image-version">
-      <defaultValue>17.0.11_9-jre</defaultValue>
+      <defaultValue>17.0.21_9-jre</defaultValue>
     </requiredProperty>
     <requiredProperty key="exec-maven-plugin-version">
-      <defaultValue>3.3.0</defaultValue>
+      <defaultValue>3.6.4</defaultValue>
     </requiredProperty>
     <!-- build vars -->
     <requiredProperty key="otlp-endpoint">

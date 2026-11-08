@@ -1,6 +1,7 @@
 const AdmZip = require("adm-zip");
 const fs = require("fs/promises");
 const path = require("path");
+const { isUtf8 } = require("node:buffer");
 
 async function unzipAndProcess(zipFilePath, outputDir, searchString, replacementString) {
   try {
@@ -24,15 +25,18 @@ async function unzipAndProcess(zipFilePath, outputDir, searchString, replacement
         await fs.mkdir(outputPath, { recursive: true });
         console.log(`Created directory: ${outputPath}`);
       } else {
-        // Read file content, replace occurrences, and write to a new file
-        const content = entry.getData().toString();
-        const updatedContent = content.replace(
-          new RegExp(searchString, "g"),
-          replacementString
-        );
+        // Only substitute text; decoding binary assets as UTF-8 corrupts them.
+        const content = entry.getData();
+        const updatedContent = isUtf8(content) && !content.includes(0)
+          ? content.toString("utf8").replace(
+              new RegExp(searchString, "g"),
+              replacementString
+            )
+          : content;
 
         // Write the updated file
-        await fs.writeFile(outputPath, updatedContent, "utf8");
+        await fs.mkdir(path.dirname(outputPath), { recursive: true });
+        await fs.writeFile(outputPath, updatedContent);
         console.log(`Processed file: ${outputPath}`);
       }
     }

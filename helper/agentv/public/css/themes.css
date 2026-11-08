@@ -1,0 +1,106 @@
+/*
+ * All themes in one file. The active theme is picked with
+ * <html data-theme="main-dark-green">; without the attribute,
+ * main-light-yellow applies.
+ */
+
+/* LIGHT BASE (default) */
+:root {
+	--tmpl-main-color-darker: #bf9700;
+	--tmpl-main-color-dark: #edbb00;
+	--tmpl-main-color: #ffc900;
+	--tmpl-main-color-light: #ffe480;
+
+	--tmpl-back-color: #ededed;
+	--tmpl-back-color-dark: #f0f0f0;
+	--tmpl-back-color-light: #ffffff;
+
+	--tmpl-text-color: black;
+
+	--tmpl-negative-color-darker: #997f7a;
+	--tmpl-negative-color-dark: #e6bfb8;
+	--tmpl-negative-color: #ffd4cc;
+	--tmpl-negative-color-light: #f2cac2;
+
+	--tmpl-positive-color-darker: #85bd82;
+	--tmpl-positive-color-dark: #a6eba2;
+	--tmpl-positive-color: #b4ffb0;
+	--tmpl-positive-color-light: #d7f2df;
+
+	--tmpl-logo: url("./../img/logo-black.svg");
+	--tmpl-logo-text: url("./../img/logo-and-text-black.svg");
+
+	color-scheme: light;
+}
+
+/* DARK BASE */
+[data-theme^="main-dark"] {
+	--tmpl-back-color: black;
+	--tmpl-back-color-dark: #383b44;
+	--tmpl-back-color-light: #191c23;
+
+	--tmpl-text-color: white;
+
+	--tmpl-negative-color-darker: #6A0000;
+	--tmpl-negative-color-dark: #A70000;
+	--tmpl-negative-color: #E92C00;
+	--tmpl-negative-color-light: #FF8B96;
+
+	--tmpl-positive-color-darker: #2f4f4f;
+	--tmpl-positive-color-dark: #3b6547;
+	--tmpl-positive-color: #719d7d;
+	--tmpl-positive-color-light: #8fbc9b;
+
+	--tmpl-logo: url("./../img/logo.svg");
+	--tmpl-logo-text: url("./../img/logo-and-text.svg");
+
+	color-scheme: dark;
+}
+
+/* MAIN COLORS PER THEME */
+[data-theme="main-light-green"] {
+	--tmpl-main-color-darker: #85bd82;
+	--tmpl-main-color-dark: #a6eba2;
+	--tmpl-main-color: #b4ffb0;
+	--tmpl-main-color-light: #d7f2df;
+}
+
+[data-theme="main-dark-blue"] {
+	--tmpl-main-color-darker: #152740;
+	--tmpl-main-color-dark: #1d3557;
+	--tmpl-main-color: #25436e;
+	--tmpl-main-color-light: #4d8ce6;
+}
+
+[data-theme="main-dark-green"] {
+	--tmpl-main-color-darker: #2f4f4f;
+	--tmpl-main-color-dark: #3b6547;
+	--tmpl-main-color: #719d7d;
+	--tmpl-main-color-light: #8fbc9b;
+
+	--tmpl-negative-color-darker: #310202;
+	--tmpl-negative-color-dark: #912108;
+	--tmpl-negative-color: #F34F2C;
+	--tmpl-negative-color-light: #F3722C;
+}
+
+[data-theme="main-dark-orange"] {
+	--tmpl-main-color-darker: #663200;
+	--tmpl-main-color-dark: #b35800;
+	--tmpl-main-color: #ff7d00;
+	--tmpl-main-color-light: #ffbe80;
+}
+
+[data-theme="main-dark-purple"] {
+	--tmpl-main-color-darker: #310840;
+	--tmpl-main-color-dark: #440b59;
+	--tmpl-main-color: #540D6E;
+	--tmpl-main-color-light: #af1be6;
+}
+
+[data-theme="main-dark-red"] {
+	--tmpl-main-color-darker: #6A0000;
+	--tmpl-main-color-dark: #A70000;
+	--tmpl-main-color: #E92C00;
+	--tmpl-main-color-light: #FF8B96;
+}

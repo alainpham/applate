@@ -27,10 +27,7 @@
         <docker.root.domain>${docker-root-domain}</docker.root.domain>
         <docker.otlp.endpoint>${docker-otlp-endpoint}</docker.otlp.endpoint>
 
-        <kube.label.component>api</kube.label.component>
-        <kube.label.partof>business-platform</kube.label.partof>
-        <kube.label.instance>prod</kube.label.instance>
-
+        <deployment.environment.name>dev</deployment.environment.name>
     </properties>
 
     <dependencyManagement>
@@ -184,6 +181,8 @@
                                 <argument>PROJECT_ARTIFACTID=${project.artifactId}</argument>
                                 <argument>--build-arg</argument>
                                 <argument>PROJECT_VERSION=${project.version}</argument>
+                                <argument>--build-arg</argument>
+                                <argument>DEPLOYMENT_ENVIRONMENT_NAME=${deployment.environment.name}</argument>
                                 <argument>--build-arg</argument>
                                 <argument>TEMURIN_IMAGE_VERSION=${temurin.image.version}</argument>
                                 <argument>--build-arg</argument>
@@ -364,9 +363,7 @@
                             </arguments>
                             <environmentVariables>
                                 <PROJECT_ARTIFACTID>${project.artifactId}</PROJECT_ARTIFACTID>
-                                <KUBE_LABEL_COMPONENT>${kube.label.component}</KUBE_LABEL_COMPONENT>
-                                <KUBE_LABEL_PARTOF>${kube.label.partof}</KUBE_LABEL_PARTOF>
-                                <KUBE_LABEL_INSTANCE>${kube.label.instance}</KUBE_LABEL_INSTANCE>
+                                <PROJECT_GROUPID>${project.groupId}</PROJECT_GROUPID>
                                 <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
                                 <CONTAINER_REGISTRY>${container.registry}</CONTAINER_REGISTRY>
                                 <OTLP_ENDPOINT>${kube.otlp.endpoint}</OTLP_ENDPOINT>
@@ -388,9 +385,7 @@
                             </arguments>
                             <environmentVariables>
                                 <PROJECT_ARTIFACTID>${project.artifactId}</PROJECT_ARTIFACTID>
-                                <KUBE_LABEL_COMPONENT>${kube.label.component}</KUBE_LABEL_COMPONENT>
-                                <KUBE_LABEL_PARTOF>${kube.label.partof}</KUBE_LABEL_PARTOF>
-                                <KUBE_LABEL_INSTANCE>${kube.label.instance}</KUBE_LABEL_INSTANCE>
+                                <PROJECT_GROUPID>${project.groupId}</PROJECT_GROUPID>
                                 <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
                                 <CONTAINER_REGISTRY>${container.registry}</CONTAINER_REGISTRY>
                                 <OTLP_ENDPOINT>${kube.otlp.endpoint}</OTLP_ENDPOINT>
@@ -412,9 +407,7 @@
                             </arguments>
                             <environmentVariables>
                                 <PROJECT_ARTIFACTID>${project.artifactId}</PROJECT_ARTIFACTID>
-                                <KUBE_LABEL_COMPONENT>${kube.label.component}</KUBE_LABEL_COMPONENT>
-                                <KUBE_LABEL_PARTOF>${kube.label.partof}</KUBE_LABEL_PARTOF>
-                                <KUBE_LABEL_INSTANCE>${kube.label.instance}</KUBE_LABEL_INSTANCE>
+                                <PROJECT_GROUPID>${project.groupId}</PROJECT_GROUPID>
                                 <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
                                 <CONTAINER_REGISTRY>${container.registry}</CONTAINER_REGISTRY>
                                 <OTLP_ENDPOINT>${kube.otlp.endpoint}</OTLP_ENDPOINT>
@@ -449,7 +442,7 @@
                             <OTEL_JAVAAGENT_ENABLED>true</OTEL_JAVAAGENT_ENABLED>
                             <OTEL_METRIC_EXPORT_INTERVAL>15000</OTEL_METRIC_EXPORT_INTERVAL>
                             <OTEL_EXPORTER_OTLP_TIMEOUT>10000</OTEL_EXPORTER_OTLP_TIMEOUT>
-                            <OTEL_RESOURCE_ATTRIBUTES>service.name=${project.artifactId},service.namespace=${project.artifactId}-ns,service.instance.id=${project.artifactId}-dev,service.version=${project.version}</OTEL_RESOURCE_ATTRIBUTES>
+                            <OTEL_RESOURCE_ATTRIBUTES>service.name=${project.artifactId},service.namespace=${project.artifactId}-ns,service.instance.id=${project.artifactId},service.version=${project.version}</OTEL_RESOURCE_ATTRIBUTES>
                         </environmentVariables>
                     </configuration>
                 </plugin>

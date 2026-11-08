@@ -16,28 +16,28 @@
       <defaultValue>17</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-compiler-plugin-version">
-      <defaultValue>3.13.0</defaultValue>
+      <defaultValue>3.16.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-dependency-plugin-version">
-      <defaultValue>3.6.1</defaultValue>
+      <defaultValue>3.11.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-jar-plugin-version">
-      <defaultValue>3.4.1</defaultValue>
+      <defaultValue>3.5.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="camel-version">
-      <defaultValue>4.6.0</defaultValue>
+      <defaultValue>4.22.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="logback-version">
-      <defaultValue>1.5.6</defaultValue>
+      <defaultValue>1.5.38</defaultValue>
     </requiredProperty>
     <requiredProperty key="temurin-image-version">
-      <defaultValue>17.0.11_9-jre</defaultValue>
+      <defaultValue>17.0.21_9-jre</defaultValue>
     </requiredProperty>
     <requiredProperty key="opentelemetry-version">
-      <defaultValue>2.4.0</defaultValue>
+      <defaultValue>2.33.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="exec-maven-plugin-version">
-      <defaultValue>3.3.0</defaultValue>
+      <defaultValue>3.6.4</defaultValue>
     </requiredProperty>
 
     <!-- build vars -->

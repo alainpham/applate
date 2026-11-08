@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* && 
 ENV JAVA_TOOL_OPTIONS=-javaagent:/opt/opentelemetry-javaagent.jar \
     OTEL_JAVAAGENT_ENABLED=false \
     OTEL_EXPORTER_OTLP_ENDPOINT=http://alloy:4318 \
-    OTEL_RESOURCE_ATTRIBUTES=service.name=${PROJECT_ARTIFACTID},service.namespace=${PROJECT_ARTIFACTID}-ns,service.instance.id=${PROJECT_ARTIFACTID}-cnt,service.version=${PROJECT_VERSION}
+    OTEL_RESOURCE_ATTRIBUTES=deployment.environment.name=${DEPLOYMENT_ENVIRONMENT_NAME},service.name=${PROJECT_ARTIFACTID},service.namespace=${PROJECT_ARTIFACTID}-ns,service.instance.id=${PROJECT_ARTIFACTID},service.version=${PROJECT_VERSION}
 
 COPY --from=builder /builds/extracted/dependencies/ /deployments/
 COPY --from=builder /builds/extracted/spring-boot-loader/ /deployments/

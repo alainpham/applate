@@ -1,4 +1,4 @@
 node_modules/
 .npm-cache/
-.env
-npm-debug.log*
+data/results.yaml
+data/results.yaml.*.tmp

@@ -6,7 +6,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <requiredProperties>
     <requiredProperty key="spring-boot-version">
-      <defaultValue>4.1.0</defaultValue>
+      <defaultValue>4.1.2</defaultValue>
     </requiredProperty>
     <requiredProperty key="project-reporting-outputEncoding">
       <defaultValue>UTF-8</defaultValue>
@@ -21,37 +21,37 @@
       <defaultValue>25</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-compiler-plugin-version">
-      <defaultValue>3.15.0</defaultValue>
+      <defaultValue>3.16.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="temurin-image-version">
-      <defaultValue>25.0.3_9-jre</defaultValue>
+      <defaultValue>25.0.5_8-jre</defaultValue>
     </requiredProperty>
     <requiredProperty key="opentelemetry-version">
-      <defaultValue>2.30.0</defaultValue>
+      <defaultValue>2.33.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="springdoc-openapi-version">
-      <defaultValue>3.1.0</defaultValue>
+      <defaultValue>3.2.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="exec-maven-plugin-version">
-      <defaultValue>3.6.3</defaultValue>
+      <defaultValue>3.6.4</defaultValue>
     </requiredProperty>
     
     <!-- app vars -->
     <!-- build vars -->
     <requiredProperty key="kube-otlp-endpoint">
-      <defaultValue>http://grafana-k8s-monitoring-alloy-receiver.default.svc.cluster.local:4318</defaultValue>
+      <defaultValue>http://grafana-cloud-alloy-deployment.monitoring.svc.cluster.local:4318</defaultValue>
     </requiredProperty>
     <requiredProperty key="container-registry">
       <defaultValue>alainpham</defaultValue>
     </requiredProperty>
     <requiredProperty key="kube-ingress-root-domain">
-      <defaultValue>kubes.dns.army</defaultValue>
+      <defaultValue>k.codersandbox.com</defaultValue>
     </requiredProperty>
     <requiredProperty key="docker-network">
       <defaultValue>primenet</defaultValue>
     </requiredProperty>
     <requiredProperty key="docker-root-domain">
-      <defaultValue>houze.dns.army</defaultValue>
+      <defaultValue>d.codersandbox.com</defaultValue>
     </requiredProperty>
     <requiredProperty key="docker-otlp-endpoint">
       <defaultValue>http://alloy:4318</defaultValue>
