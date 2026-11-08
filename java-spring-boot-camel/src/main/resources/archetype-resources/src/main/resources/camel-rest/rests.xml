@@ -1,7 +1,11 @@
 <rests xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://camel.apache.org/schema/spring ./../xsd/camel-spring.xsd">
-    <rest id="rest-svc" path="/restsvc">
-        <get id="get-ping" path="/ping">
+    <rest id="rest-svc" produces="application/json">
+        <get id="get-ping" path="/ping" bindingMode="off">
             <to uri="direct:get-ping"/>
         </get>
+        <post id="post-send-msg" path="/send-msg" consumes="application/json"
+              type="${package}.model.Person" outType="${package}.model.Person">
+            <to uri="direct:send-msg"/>
+        </post>
     </rest>
 </rests>

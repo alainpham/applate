@@ -1,43 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://camel.apache.org/schema/spring ./../xsd/camel-spring.xsd">
-    <route id="http-receiver">
-        <from id="http-receiver-starter" uri="platform-http:/ping" />
-        <setHeader id="set-header-http-receiver" name="Content-Type">
-            <constant>application/json</constant>
-        </setHeader>
-        <setBody id="set-body-http-receiver">
-            <constant>{"msg" : "HELLO"}</constant>
-        </setBody>
-    </route>
-
     <route id="send-msg">
-        <from id="send-socket-msg-to-all-starter" uri="platform-http:/send-msg"/>
-        <convertBodyTo type="java.lang.String"/>
-        <unmarshal>
-            <json library="Jackson"/>
-        </unmarshal>
+        <from uri="direct:send-msg"/>
         <log message="${body}"/>
-
-        <bean ref="viewUpdate" method="upsertData(${body}, person, state-table)"/>
-        <bean ref="viewUpdate" method="appendData(${body}, person, log-table)"/>
-
-        <marshal>
-            <json library="Jackson"/>
-        </marshal>
+        <setProperty name="person">
+            <simple>${body}</simple>
+        </setProperty>
+        <bean beanType="java.util.Collections" method="singletonList"/>
+        <bean ref="view" method="update('person', ${body})"/>
+        <setBody>
+            <simple>${exchangeProperty.person}</simple>
+        </setBody>
     </route>
 
     <route id="get-ping-route">
         <from uri="direct:get-ping"/>
+        <log message="${headers}"/>
+        <setHeader name="Content-Type">
+            <constant>application/json</constant>
+        </setHeader>
         <setBody>
-            <constant>pong</constant>
+            <constant>{"msg":"HELLO"}</constant>
         </setBody>
     </route>
 
 #if (${cxfSupport} == 'true')
-    <route>
+    <route id="get-person-soap">
         <from uri="cxf:bean:cxfPayload"/>
         <convertBodyTo type="java.lang.String"/>
         <log message="${body}"/>
+        <to uri="xslt:soap/get-person.xsl"/>
     </route>
 
 #end

@@ -1,4 +1,4 @@
-package ${package};
+package ${package}.service;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.micrometer.eventnotifier.MicrometerExchangeEventNotifier;
@@ -22,7 +22,7 @@ public class RestConfigurator extends RouteBuilder {
 		.apiContextRouteId("api-docs")
 		.component("platform-http")
 		.bindingMode(RestBindingMode.json)
-		.apiContextPath("/camel-openapi")
+		.clientRequestValidation(true)
 		.apiProperty("cors", "true")
 		.apiProperty("api.title", environment.getProperty("camel.springboot.name"))
 		.apiProperty("api.version", environment.getProperty("camelrest.apiversion"))

@@ -3,6 +3,7 @@
 - [🚀 Applate 🚀](#-applate-)
   - [Installation](#installation)
   - [Commands to bootstrap projects](#commands-to-bootstrap-projects)
+    - [Camel Spring Boot with CXF SOAP services](#camel-spring-boot-with-cxf-soap-services)
   - [Observability Stack for Dev Environment](#observability-stack-for-dev-environment)
     - [Grafana Dashboard for HTTP services](#grafana-dashboard-for-http-services)
     - [Grafana Dashboard for Apache Camel](#grafana-dashboard-for-apache-camel)
@@ -44,6 +45,61 @@ jcamelquarkus
 # NodeJS Express
 njsexpress YOUR_PROJECT_NAME
 ```
+
+### Camel Spring Boot with CXF SOAP services
+
+With the helper commands installed, use the optional `--cxf` flag:
+
+```sh
+jcamelspring --cxf
+```
+
+Running `jcamelspring` without the flag generates a project without CXF support.
+Run `jcamelspring --help` for usage.
+
+Install the Camel archetype from this repository if you have not already run the
+installation script:
+
+```sh
+mvn -f java-spring-boot-camel/pom.xml install
+```
+
+Generate a project with CXF enabled using `-DcxfSupport=true`:
+
+```sh
+mvn archetype:generate \
+  -DarchetypeCatalog=local \
+  -DarchetypeGroupId=net.alainpham.applate \
+  -DarchetypeArtifactId=java-spring-boot-camel \
+  -DarchetypeVersion=1.0.0 \
+  -DgroupId=com.example \
+  -DartifactId=my-camel-service \
+  -Dversion=1.0.0-SNAPSHOT \
+  -Dpackage=com.example.camel \
+  -DcxfSupport=true \
+  -DinteractiveMode=false
+
+cd my-camel-service
+mvn spring-boot:run
+```
+
+`cxfSupport` defaults to `false` and is applied when generating the project.
+The enabled project exposes its SOAP endpoint at
+`http://localhost:8080/services/soappayload` and its WSDL at
+`http://localhost:8080/services/soappayload?wsdl`. The sample `getPersonOp`
+returns the requested ID with the demo name `Demo Person` and age `30`.
+REST `/ping`, `/send-msg`, and WebSocket `/websocket` remain available.
+
+The WSDL is in `src/main/resources/api-definitions/contract.wsdl`; its XML response
+mapping is in `src/main/resources/soap/get-person.xsl`. The payload-based SOAP
+route runs without generating Java classes. To optionally generate and compile
+Java classes from the WSDL, run:
+
+```sh
+mvn -Pcxfgen clean package
+```
+
+Generated classes are written to `target/generated-sources/cxf`.
 
 ## Observability Stack for Dev Environment
 

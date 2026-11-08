@@ -1,4 +1,4 @@
-package ${package};
+package ${package}.helper;
 
 import java.util.Map;
 import java.util.TreeMap;

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>${groupId}</groupId>
     <artifactId>${artifactId}</artifactId>
@@ -67,9 +69,9 @@
         </dependency>
 
         <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-websocket</artifactId>
-		</dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,9 +79,9 @@
         </dependency>
 
         <dependency>
-			<groupId>org.apache.camel.springboot</groupId>
-			<artifactId>camel-platform-http-starter</artifactId>
-		</dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-platform-http-starter</artifactId>
+        </dependency>
 
         <!-- activate JMX metrics for camel -->
         <dependency>
@@ -94,13 +96,13 @@
 
         <dependency>
             <groupId>org.apache.camel${camel-sbsuffix}</groupId>
-            <artifactId>camel-opentelemetry-starter</artifactId>
+            <artifactId>camel-opentelemetry2-starter</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
-            </dependency>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
@@ -137,34 +139,29 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http</artifactId>
         </dependency>
-        <!--Camel Servlet starter -->
+        <!--Camel
+        Servlet starter -->
         <dependency>
             <groupId>org.apache.camel${camel-sbsuffix}</groupId>
             <artifactId>camel-servlet-starter</artifactId>
-        </dependency>
-
-#if (${cxfSupport} == 'true')
-        <!--Camel CXF starter -->
+        </dependency> #if (${cxfSupport} == 'true') <!--Camel
+        CXF starter -->
         <dependency>
             <groupId>org.apache.camel${camel-sbsuffix}</groupId>
-            <artifactId>camel-cxf-starter</artifactId>
+            <artifactId>camel-cxf-soap-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel${camel-sbsuffix}</groupId>
+            <artifactId>camel-xslt-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-soap</artifactId>
-        </dependency>
-#end
-
-        <!--For database access -->
+        </dependency> #end <!--For
+        database access -->
         <dependency>
             <groupId>org.apache.camel${camel-sbsuffix}</groupId>
             <artifactId>camel-sql-starter</artifactId>
-        </dependency>
-
-        <!-- for websockets -->
-        <dependency>
-            <groupId>org.apache.camel${camel-sbsuffix}</groupId>
-            <artifactId>camel-vertx-websocket-starter</artifactId>
         </dependency>
 
     </dependencies>
@@ -204,7 +201,8 @@
                             <arguments>
                                 <argument>rmi</argument>
                                 <argument>-f</argument>
-                                <argument>${container.registry}/${project.artifactId}:${project.version}</argument>
+                                <argument>
+                                    ${container.registry}/${project.artifactId}:${project.version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -234,7 +232,8 @@
                                 <argument>-f</argument>
                                 <argument>src/main/docker/Dockerfile</argument>
                                 <argument>-t</argument>
-                                <argument>${container.registry}/${project.artifactId}:${project.version}</argument>
+                                <argument>
+                                    ${container.registry}/${project.artifactId}:${project.version}</argument>
                                 <argument>.</argument>
                             </arguments>
                         </configuration>
@@ -249,7 +248,8 @@
                             <workingDirectory>${project.basedir}</workingDirectory>
                             <arguments>
                                 <argument>push</argument>
-                                <argument>${container.registry}/${project.artifactId}:${project.version}</argument>
+                                <argument>
+                                    ${container.registry}/${project.artifactId}:${project.version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -281,7 +281,8 @@
                                 <argument>-f</argument>
                                 <argument>src/main/docker/Dockerfile</argument>
                                 <argument>-t</argument>
-                                <argument>${container.registry}/${project.artifactId}:${project.version}</argument>
+                                <argument>
+                                    ${container.registry}/${project.artifactId}:${project.version}</argument>
                                 <argument>.</argument>
                             </arguments>
                         </configuration>
@@ -310,18 +311,24 @@
                                 <argument>-l</argument>
                                 <argument>traefik.enable=true</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.services.${project.artifactId}.loadbalancer.server.port=8080</argument>
+                                <argument>
+                                    traefik.http.services.${project.artifactId}.loadbalancer.server.port=8080</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.services.${project.artifactId}.loadbalancer.server.scheme=http</argument>
+                                <argument>
+                                    traefik.http.services.${project.artifactId}.loadbalancer.server.scheme=http</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.service=${project.artifactId}</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.service=${project.artifactId}</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.entrypoints=http</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.entrypoints=http</argument>
                                 <argument>-l</argument>
                                 <argument>traefik.http.routers.${project.artifactId}.tls=false</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.rule=Host(`${project.artifactId}.${docker.root.domain}`)</argument>
-                                <argument>${container.registry}/${project.artifactId}:${project.version}</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.rule=Host(`${project.artifactId}.${docker.root.domain}`)</argument>
+                                <argument>
+                                    ${container.registry}/${project.artifactId}:${project.version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -347,18 +354,24 @@
                                 <argument>-l</argument>
                                 <argument>traefik.enable=true</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.services.${project.artifactId}.loadbalancer.server.port=8080</argument>
+                                <argument>
+                                    traefik.http.services.${project.artifactId}.loadbalancer.server.port=8080</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.services.${project.artifactId}.loadbalancer.server.scheme=http</argument>
+                                <argument>
+                                    traefik.http.services.${project.artifactId}.loadbalancer.server.scheme=http</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.service=${project.artifactId}</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.service=${project.artifactId}</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.entrypoints=http</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.entrypoints=http</argument>
                                 <argument>-l</argument>
                                 <argument>traefik.http.routers.${project.artifactId}.tls=false</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.rule=Host(`${project.artifactId}.${docker.root.domain}`)</argument>
-                                <argument>${container.registry}/${project.artifactId}:${project.version}</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.rule=Host(`${project.artifactId}.${docker.root.domain}`)</argument>
+                                <argument>
+                                    ${container.registry}/${project.artifactId}:${project.version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -387,18 +400,24 @@
                                 <argument>-l</argument>
                                 <argument>traefik.enable=true</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.services.${project.artifactId}.loadbalancer.server.port=8080</argument>
+                                <argument>
+                                    traefik.http.services.${project.artifactId}.loadbalancer.server.port=8080</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.services.${project.artifactId}.loadbalancer.server.scheme=http</argument>
+                                <argument>
+                                    traefik.http.services.${project.artifactId}.loadbalancer.server.scheme=http</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.service=${project.artifactId}</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.service=${project.artifactId}</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.entrypoints=http</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.entrypoints=http</argument>
                                 <argument>-l</argument>
                                 <argument>traefik.http.routers.${project.artifactId}.tls=false</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.rule=Host(`${project.artifactId}.${docker.root.domain}`)</argument>
-                                <argument>${container.registry}/${project.artifactId}:${project.version}</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.rule=Host(`${project.artifactId}.${docker.root.domain}`)</argument>
+                                <argument>
+                                    ${container.registry}/${project.artifactId}:${project.version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -425,18 +444,24 @@
                                 <argument>-l</argument>
                                 <argument>traefik.enable=true</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.services.${project.artifactId}.loadbalancer.server.port=8080</argument>
+                                <argument>
+                                    traefik.http.services.${project.artifactId}.loadbalancer.server.port=8080</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.services.${project.artifactId}.loadbalancer.server.scheme=http</argument>
+                                <argument>
+                                    traefik.http.services.${project.artifactId}.loadbalancer.server.scheme=http</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.service=${project.artifactId}</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.service=${project.artifactId}</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.entrypoints=http</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.entrypoints=http</argument>
                                 <argument>-l</argument>
                                 <argument>traefik.http.routers.${project.artifactId}.tls=false</argument>
                                 <argument>-l</argument>
-                                <argument>traefik.http.routers.${project.artifactId}.rule=Host(`${project.artifactId}.${docker.root.domain}`)</argument>
-                                <argument>${container.registry}/${project.artifactId}:${project.version}</argument>
+                                <argument>
+                                    traefik.http.routers.${project.artifactId}.rule=Host(`${project.artifactId}.${docker.root.domain}`)</argument>
+                                <argument>
+                                    ${container.registry}/${project.artifactId}:${project.version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -530,7 +555,8 @@
                                     <goal>generate-xml</goal>
                                 </goals>
                                 <configuration>
-                                    <specificationUri>src/main/resources/api-definitions/basic-api.yaml</specificationUri>
+                                    <specificationUri>
+        src/main/resources/api-definitions/basic-api.yaml</specificationUri>
                                     <outputDirectory>src/main/resources/camel-rest</outputDirectory>
                                 </configuration>
                             </execution>
@@ -575,9 +601,7 @@
                 </plugins>
             </build>
         </profile>
-
-#if (${cxfSupport} == 'true')
-         <!-- generate code from a wsdl -->
+        #if (${cxfSupport} == 'true')<!-- generate code from a wsdl -->
         <profile>
             <id>cxfgen</id>
             <build>
@@ -594,11 +618,11 @@
                                     <goal>wsdl2java</goal>
                                 </goals>
                                 <configuration>
-                                    <sourceRoot>${basedir}/src/main/java</sourceRoot>
+                                    <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
                                     <wsdlOptions>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/wsdl/contract.wsdl</wsdl>
-                                            <wsdlLocation>classpath:wsdl/contract.wsdl</wsdlLocation>
+                                            <wsdl>${basedir}/src/main/resources/api-definitions/contract.wsdl</wsdl>
+                                            <wsdlLocation>classpath:api-definitions/contract.wsdl</wsdlLocation>
                                             <bareMethods></bareMethods>
                                         </wsdlOption>
                                     </wsdlOptions>
@@ -609,36 +633,36 @@
                 </plugins>
             </build>
         </profile>
-#end
-
-    <profile>
-        <id>dev-otel</id>
-        <dependencies>
-            <!-- observability with otel -->
-            <dependency>
-                <groupId>io.opentelemetry.javaagent</groupId>
-                <artifactId>opentelemetry-javaagent</artifactId>
-                <version>${opentelemetry.version}</version>
-                <scope>provided</scope>
-            </dependency>
-        </dependencies>
-        <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <configuration>
-                        <environmentVariables>
-                            <JAVA_TOOL_OPTIONS>-javaagent:${user.home}/.m2/repository/io/opentelemetry/javaagent/opentelemetry-javaagent/${opentelemetry.version}/opentelemetry-javaagent-${opentelemetry.version}.jar</JAVA_TOOL_OPTIONS>
-                            <OTEL_JAVAAGENT_ENABLED>true</OTEL_JAVAAGENT_ENABLED>
-                            <OTEL_METRIC_EXPORT_INTERVAL>15000</OTEL_METRIC_EXPORT_INTERVAL>
-                            <OTEL_EXPORTER_OTLP_TIMEOUT>10000</OTEL_EXPORTER_OTLP_TIMEOUT>
-                            <OTEL_RESOURCE_ATTRIBUTES>deployment.environment.name=${deployment.environment.name},service.name=${project.artifactId},service.namespace=${project.artifactId}-ns,service.instance.id=${project.artifactId},service.version=${project.version}</OTEL_RESOURCE_ATTRIBUTES>
-                        </environmentVariables>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </build>
-    </profile>
+        #end <profile>
+            <id>dev-otel</id>
+            <dependencies>
+                <!-- observability with otel -->
+                <dependency>
+                    <groupId>io.opentelemetry.javaagent</groupId>
+                    <artifactId>opentelemetry-javaagent</artifactId>
+                    <version>${opentelemetry.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <environmentVariables>
+                                <JAVA_TOOL_OPTIONS>
+        -javaagent:${user.home}/.m2/repository/io/opentelemetry/javaagent/opentelemetry-javaagent/${opentelemetry.version}/opentelemetry-javaagent-${opentelemetry.version}.jar</JAVA_TOOL_OPTIONS>
+                                <OTEL_JAVAAGENT_ENABLED>true</OTEL_JAVAAGENT_ENABLED>
+                                <OTEL_METRIC_EXPORT_INTERVAL>15000</OTEL_METRIC_EXPORT_INTERVAL>
+                                <OTEL_EXPORTER_OTLP_TIMEOUT>10000</OTEL_EXPORTER_OTLP_TIMEOUT>
+                                <OTEL_RESOURCE_ATTRIBUTES>
+        deployment.environment.name=${deployment.environment.name},service.name=${project.artifactId},service.namespace=${project.artifactId}-ns,service.instance.id=${project.artifactId},service.version=${project.version}</OTEL_RESOURCE_ATTRIBUTES>
+                            </environmentVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
