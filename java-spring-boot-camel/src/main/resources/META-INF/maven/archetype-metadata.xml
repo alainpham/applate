@@ -12,10 +12,10 @@
       <defaultValue>.springboot</defaultValue>
     </requiredProperty>
     <requiredProperty key="camel-version">
-      <defaultValue>4.4.5</defaultValue>
+      <defaultValue>4.23.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="spring-boot-version">
-      <defaultValue>3.2.12</defaultValue>
+      <defaultValue>4.1.2</defaultValue>
     </requiredProperty>
     <requiredProperty key="swagger-codegen-version">
       <defaultValue>3.0.84</defaultValue>
@@ -30,22 +30,22 @@
       <defaultValue>UTF-8</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-compiler-target">
-      <defaultValue>17</defaultValue>
+      <defaultValue>25</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-compiler-source">
-      <defaultValue>17</defaultValue>
+      <defaultValue>25</defaultValue>
     </requiredProperty>
     <requiredProperty key="maven-compiler-plugin-version">
       <defaultValue>3.16.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="temurin-image-version">
-      <defaultValue>17.0.21_9-jre</defaultValue>
+      <defaultValue>25.0.5_8-jre</defaultValue>
     </requiredProperty>
     <requiredProperty key="opentelemetry-version">
       <defaultValue>2.33.1</defaultValue>
     </requiredProperty>
     <requiredProperty key="springdoc-openapi-version">
-      <defaultValue>2.5.0</defaultValue>
+      <defaultValue>3.2.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="exec-maven-plugin-version">
       <defaultValue>3.6.4</defaultValue>
@@ -53,14 +53,23 @@
     
     <!-- app vars -->
     <!-- build vars -->
-    <requiredProperty key="otlp-endpoint">
-      <defaultValue>http://grafana-k8s-monitoring-grafana-agent.agents.svc.cluster.local:4318</defaultValue>
-    </requiredProperty>
     <requiredProperty key="container-registry">
       <defaultValue>alainpham</defaultValue>
     </requiredProperty>
     <requiredProperty key="kube-ingress-root-domain">
-      <defaultValue>kube.lan</defaultValue>
+      <defaultValue>k.codersandbox.com</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="kube-otlp-endpoint">
+      <defaultValue>http://grafana-cloud-alloy-deployment.monitoring.svc.cluster.local:4318</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="docker-network">
+      <defaultValue>primenet</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="docker-root-domain">
+      <defaultValue>d.codersandbox.com</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="docker-otlp-endpoint">
+      <defaultValue>http://alloy:4318</defaultValue>
     </requiredProperty>
   </requiredProperties>
   <fileSets>

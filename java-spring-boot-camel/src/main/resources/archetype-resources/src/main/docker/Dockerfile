@@ -1,11 +1,11 @@
-ARG TEMURIN_IMAGE_VERSION
+ARG TEMURIN_IMAGE_VERSION=25-jre
 
-FROM eclipse-temurin:${TEMURIN_IMAGE_VERSION} as builder
+FROM eclipse-temurin:${TEMURIN_IMAGE_VERSION} AS builder
 WORKDIR /builds
 COPY target/*.jar application.jar
-RUN java -Djarmode=layertools -jar application.jar extract
+RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --destination extracted
 
-ARG TEMURIN_IMAGE_VERSION
+ARG TEMURIN_IMAGE_VERSION=25-jre
 
 FROM eclipse-temurin:${TEMURIN_IMAGE_VERSION}
 
@@ -15,27 +15,30 @@ ARG TEMURIN_IMAGE_VERSION
 ARG PROJECT_ARTIFACTID
 ARG PROJECT_VERSION
 ARG OPENTELEMETRY_VERSION
+ARG DEPLOYMENT_ENVIRONMENT_NAME
 
-RUN useradd -u 1000 appuser
+# RUN useradd -u 1000 appuser
 
 WORKDIR /deployments
 
 ENV PROJECT_ARTIFACTID=${PROJECT_ARTIFACTID} \
     PROJECT_VERSION=${PROJECT_VERSION} \
     TEMURIN_IMAGE_VERSION=${TEMURIN_IMAGE_VERSION} \
-    OPENTELEMETRY_VERSION=${OPENTELEMETRY_VERSION}
+    OPENTELEMETRY_VERSION=${OPENTELEMETRY_VERSION} \
+    DEPLOYMENT_ENVIRONMENT_NAME=${DEPLOYMENT_ENVIRONMENT_NAME}
 
-RUN curl https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${OPENTELEMETRY_VERSION}/opentelemetry-javaagent.jar -Lo /opt/opentelemetry-javaagent.jar
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* && \
+    curl https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${OPENTELEMETRY_VERSION}/opentelemetry-javaagent.jar -Lo /opt/opentelemetry-javaagent.jar
 
 ENV JAVA_TOOL_OPTIONS=-javaagent:/opt/opentelemetry-javaagent.jar \
     OTEL_JAVAAGENT_ENABLED=false \
-    OTEL_EXPORTER_OTLP_ENDPOINT=http://o11y_otel:4318 \
-    OTEL_RESOURCE_ATTRIBUTES=service.name=${PROJECT_ARTIFACTID},service.namespace=${PROJECT_ARTIFACTID}-ns,service.instance.id=${PROJECT_ARTIFACTID}-cnt,service.version=${PROJECT_VERSION}
+    OTEL_EXPORTER_OTLP_ENDPOINT=http://alloy:4318 \
+    OTEL_RESOURCE_ATTRIBUTES=deployment.environment.name=${DEPLOYMENT_ENVIRONMENT_NAME},service.name=${PROJECT_ARTIFACTID},service.namespace=${PROJECT_ARTIFACTID}-ns,service.instance.id=${PROJECT_ARTIFACTID},service.version=${PROJECT_VERSION}
 
-COPY --from=builder /builds/dependencies/ /deployments/
-COPY --from=builder /builds/spring-boot-loader/ /deployments/
-COPY --from=builder /builds/snapshot-dependencies/ /deployments/
-COPY --from=builder /builds/application/ /deployments/
+COPY --from=builder /builds/extracted/dependencies/ /deployments/
+COPY --from=builder /builds/extracted/spring-boot-loader/ /deployments/
+COPY --from=builder /builds/extracted/snapshot-dependencies/ /deployments/
+COPY --from=builder /builds/extracted/application/ /deployments/
 
 USER 1000
 

@@ -1,64 +1,4 @@
 ---
-# Application properties file
-kind: Secret
-apiVersion: v1
-metadata:
-  name: "${PROJECT_ARTIFACTID}-prop-secret"
-  labels:
-    app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
-    app.kubernetes.io/version: "${PROJECT_VERSION}"
-type: Opaque
-stringData: 
-  application.properties: |
-    spring.application.name=${PROJECT_ARTIFACTID}
-    logging.config=classpath:logback.xml
-
-    # the options from org.apache.camel.spring.boot.CamelConfigurationProperties can be configured here
-    camel.springboot.name=${PROJECT_ARTIFACTID}
-
-    # lets listen on all ports to ensure we can be invoked from the pod IP
-    server.address=0.0.0.0
-    management.server.address=0.0.0.0
-    # lets use a different management port in case you need to listen to HTTP requests on 8080
-    server.port=8080
-    management.server.port=8081
-
-    endpoints.enabled = true
-    endpoints.health.enabled = true
-
-    management.endpoints.web.exposure.include=health,prometheus
-    management.metrics.distribution.percentiles-histogram.http.server.requests=true
-
-    cxf.path=/services
-
-    camelrest.apiversion=${version}
-
-    theme=main-dark-green
-
-    spring.resources.cache.cachecontrol.cache-public=true
-    spring.resources.cache.cachecontrol.max-age=0
-
----
-
-# Sample TLS certs (do not use this in prod)
-kind: Secret
-apiVersion: v1
-metadata:
-  name: "${PROJECT_ARTIFACTID}-tls-secret"
-  labels:
-    app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
-    app.kubernetes.io/version: "${PROJECT_VERSION}"
-type: Opaque
-data:
-  keystore.p12: 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
-  truststore.p12: MIID5gIBAzCCA58GCSqGSIb3DQEHAaCCA5AEggOMMIIDiDCCA4QGCSqGSIb3DQEHBqCCA3UwggNxAgEAMIIDagYJKoZIhvcNAQcBMCkGCiqGSIb3DQEMAQYwGwQUE1+XG6OfKN1PDioy3syW2OMPwFACAwDDUICCAzCWoOWjjUTO+jJObHBI94bGvmqNMsNe0uO/LkxgQ3aBWDrXFVubkO6+F0xx7/7jVbr6K/sCejGlGhNlqUUG4V6ct5hLAxLJqJ/bIsyIiKsolzBuhQh4urh06it99sdsyU0yFZd8KycQEaVfVa0PZSJMCofSBfhjhyt5JDWhgWcq6ZOfET0BxVeolWzB+myBALt5cCkenVrUkVhNEuwJpPdIirKWOGkkVovh+8kM1H5+d2GuXZHAnJKOMMxRsK3kQjwMJ5s/wxDIR6VbZvN8Brcictvy9rqlJMPsrsip2dNCQ2My2PZBs9ZYDlf1lJ8aVoDy1iXuJg5iWBCgdevS+OmJWCJdF8kIlRjOz0ZvA2DoUMFF9oWbmATb9ZRaDoQ12pY3V4mRb92rOdnxUX3qi0DjakjONw2VcXWcohEn7064SGRoDgjT/gDQj485AWlnCvYa/ZQuw1k1P0zpFCBpRJIsU4tOuWi5sE9eE7D4ywNgFi8uWAlzQiBntjxrmfnJgEImFvHf+OgW4OfPVYWtMb/l9c4lsxm3Z4TtWuWD15I0fdrGnSpcVcI2X5CNISXU/IcDnTQ5HOiRsqLYUlG+zeGMLJrWeIC2R6ZYgAOTeYZu8PxgCD9iPtxbZFkXL5DGLGxDSMgyJAsZG1d1BwLWTtS2iSYwNpOtsNmzfeS9z6H+6hVGS3d6x6t6QkfZCJa5PgrJFnH2AN4qCuPWlCaUtVtRExxRTCO08xNjVdBWa44pjEZyxmmvPpck5kfACZdXFRgk4Gbeby2vpxkI37QBW3dYdwXPAnHz5RFWApj71DMQjCkKpxhYncGcijj+it6cVlF0t6MbmXXLhXvWShVhURG88xC7qjxrDxl+cXuXF2Q5vw0iPkCANuU3HDDvJEhNAL/Cr+/H1viy0KI2L1VfyMSu0RSVXY5kCLyCcC6zIcPgXO9A+mAlSLrTh3oaWrAGTGeumUxZW8uguwtCPUs+4feNgdw1FA+yaB6OIy1rVSHcMGWuxYI4+F+jvwsnpzDd7saAGmT1zRhGzNtcbR8DTzwzaZ5F+0+ivqvB6r5wCpCqQezPl9YZckF4j65LqO46JPwwPjAhMAkGBSsOAwIaBQAEFBF3KvYoEhoVfXDqP2s4w5OFg4jsBBT/OSI83QJOJ87glw6LV/za65Yz9AIDAYag
----
 
 # Deployment descriptor
 apiVersion: apps/v1
@@ -66,9 +6,8 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+    app.kubernetes.io/part-of: "${PROJECT_GROUPID}"
+    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}"
     app.kubernetes.io/version: "${PROJECT_VERSION}"
   name: "${PROJECT_ARTIFACTID}"
 spec:
@@ -76,9 +15,8 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-      app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-      app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-      app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+      app.kubernetes.io/part-of: "${PROJECT_GROUPID}"
+      app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}"
       app.kubernetes.io/version: "${PROJECT_VERSION}"
   template:
     metadata:
@@ -86,11 +24,11 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8081"
         prometheus.io/path:  "/actuator/prometheus"
+        profiles.grafana.com/java.enabled: "true"
       labels:
         app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-        app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-        app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-        app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+        app.kubernetes.io/part-of: "${PROJECT_GROUPID}"
+        app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}"
         app.kubernetes.io/version: "${PROJECT_VERSION}"
     spec:
       containers:
@@ -113,7 +51,7 @@ spec:
           - name: OTEL_JAVAAGENT_ENABLED
             value: "true"
           - name: OTEL_RESOURCE_ATTRIBUTES
-            value: "service.name=${PROJECT_ARTIFACTID},service.namespace=$(POD_NAMESPACE),service.version=${PROJECT_VERSION},service.instance.id=$(POD_NAMESPACE).$(POD_NAME).${PROJECT_ARTIFACTID}"
+            value: "deployment.environment.name=${DEPLOYMENT_ENVIRONMENT_NAME},service.name=${PROJECT_ARTIFACTID},service.namespace=$(POD_NAMESPACE),service.version=${PROJECT_VERSION},service.instance.id=$(POD_NAMESPACE).$(POD_NAME).${PROJECT_ARTIFACTID}"
         livenessProbe:
           httpGet:
             path: "/actuator/health"
@@ -142,31 +80,15 @@ spec:
         ports:
           - containerPort: 8080
           - containerPort: 8081
-        volumeMounts:
-          - mountPath: "/deployments/tls"
-            name: "tls-secret-volume"
-            readOnly: true
-          - mountPath: "/deployments/config"
-            name: "prop-secret-volume"
-            readOnly: true
-      volumes:
-        - name: "tls-secret-volume"
-          secret:
-            defaultMode: 420
-            secretName: "${PROJECT_ARTIFACTID}-tls-secret"
-        - name: "prop-secret-volume"
-          secret:
-            defaultMode: 420
-            secretName: "${PROJECT_ARTIFACTID}-prop-secret"
+
 ---
 apiVersion: "v1"
 kind: "Service"
 metadata:
   labels:
     app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+    app.kubernetes.io/part-of: "${PROJECT_GROUPID}"
+    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}"
     app.kubernetes.io/version: "${PROJECT_VERSION}"
   name: "${PROJECT_ARTIFACTID}"
 spec:
@@ -178,9 +100,8 @@ spec:
     targetPort: 8080
   selector:
     app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+    app.kubernetes.io/part-of: "${PROJECT_GROUPID}"
+    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}"
     app.kubernetes.io/version: "${PROJECT_VERSION}"
 ---
 apiVersion: networking.k8s.io/v1
@@ -189,9 +110,8 @@ metadata:
   name: ${PROJECT_ARTIFACTID}
   labels:
     app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+    app.kubernetes.io/part-of: "${PROJECT_GROUPID}"
+    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}"
     app.kubernetes.io/version: "${PROJECT_VERSION}"
   annotations:
 spec:
