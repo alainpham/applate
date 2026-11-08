@@ -12,7 +12,7 @@ mvn spring-boot:run
 mvn clean package
 ```
 
-#[[## Packaging container]]#
+#[[## Packaging container and push to registry]]#
 
 ```bash
 mvn clean package exec:exec@rmi exec:exec@build
@@ -62,55 +62,11 @@ mvn exec:exec@runoteld
 mvn exec:exec@rund
 ```
 
-Alternative with ports open on localhost
-
-```
-docker run --rm --net ${DOCKER_NETWORK} \
-    -p 8080:8080 \
-    -e OTEL_JAVAAGENT_ENABLED="true" \
-    --name ${PROJECT_ARTIFACTID} ${CONTAINER_REGISTRY}/${PROJECT_ARTIFACTID}:${PROJECT_VERSION}
-
-docker run -d --rm --net ${DOCKER_NETWORK} \
-    -p 8080:8080 \
-    -e OTEL_JAVAAGENT_ENABLED="true" \
-    --name ${PROJECT_ARTIFACTID} ${CONTAINER_REGISTRY}/${PROJECT_ARTIFACTID}:${PROJECT_VERSION}
-```
-
-Launch multiple instances
-
-```
-NB_CONTAINERS=2
-
-for (( i=0; i<$NB_CONTAINERS; i++ ))
-do
-    docker run -d --rm --net ${DOCKER_NETWORK} \
-    -e OTEL_JAVAAGENT_ENABLED="true" \
-    --name ${PROJECT_ARTIFACTID}-$i ${CONTAINER_REGISTRY}/${PROJECT_ARTIFACTID}:${PROJECT_VERSION}
-done
-
-for (( i=0; i<$NB_CONTAINERS; i++ ))
-do
-   docker stop ${PROJECT_ARTIFACTID}-$i
-   docker rm ${PROJECT_ARTIFACTID}-$i
-done
-```
-
-
 #[[## Push on registry and deploy on kube]]#
 
-```
-mvn exec:exec@push 
+```bash
 mvn exec:exec@kdelete
 mvn exec:exec@kdeploy
-```
-
-alternative with pure command line
-
-```
-docker push ${CONTAINER_REGISTRY}/${PROJECT_ARTIFACTID}:${PROJECT_VERSION}
-
-envsubst < src/main/kube/deploy.envsubst.yaml | kubectl delete -f -
-envsubst < src/main/kube/deploy.envsubst.yaml | kubectl apply -f -
 ```
 
 #[[## Multiarch build and push to registry]]#
@@ -118,35 +74,12 @@ envsubst < src/main/kube/deploy.envsubst.yaml | kubectl apply -f -
 Multi arch build and push directly to remote registry. First create a builder in buildx
 to enable multi arch builds 
 
-```
+```bash
 docker buildx create --name multibuilder --platform linux/amd64,linux/arm/v7,linux/arm64/v8 --use
 ```
 
 Run the maven instruction
 
-```
+```bash
 mvn exec:exec@buildpush
-```
-
-Alternative with pure commands
-
-```
-export PROJECT_ARTIFACTID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
-export PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-export TEMURIN_IMAGE_VERSION=$(mvn help:evaluate -Dexpression=temurin.image.version -q -DforceStdout)
-export OPENTELEMETRY_VERSION=$(mvn help:evaluate -Dexpression=opentelemetry.version -q -DforceStdout)
-export CONTAINER_REGISTRY=$(mvn help:evaluate -Dexpression=container.registry -q -DforceStdout)
-
-docker buildx build \
-    --platform linux/amd64,linux/arm/v7,linux/arm64/v8 \
-    --push \
-    --progress=plain \
-    --build-arg PROJECT_ARTIFACTID=${PROJECT_ARTIFACTID} \
-    --build-arg PROJECT_VERSION=${PROJECT_VERSION} \
-    --build-arg TEMURIN_IMAGE_VERSION=${TEMURIN_IMAGE_VERSION} \
-    --build-arg OPENTELEMETRY_VERSION=${OPENTELEMETRY_VERSION} \
-    -f src/main/docker/Dockerfile \
-    -t ${CONTAINER_REGISTRY}/${PROJECT_ARTIFACTID}:${PROJECT_VERSION} \
-    .
-
 ```

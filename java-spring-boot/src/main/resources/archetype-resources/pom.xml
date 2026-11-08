@@ -23,6 +23,7 @@
         <container.registry>${container-registry}</container.registry>
         <kube.otlp.endpoint>${kube-otlp-endpoint}</kube.otlp.endpoint>
         <kube.ingress.root.domain>${kube-ingress-root-domain}</kube.ingress.root.domain>
+        
         <docker.network>${docker-network}</docker.network>
         <docker.root.domain>${docker-root-domain}</docker.root.domain>
         <docker.otlp.endpoint>${docker-otlp-endpoint}</docker.otlp.endpoint>
