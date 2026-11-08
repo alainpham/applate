@@ -15,6 +15,7 @@ ARG TEMURIN_IMAGE_VERSION
 ARG PROJECT_ARTIFACTID
 ARG PROJECT_VERSION
 ARG OPENTELEMETRY_VERSION
+ARG DEPLOYMENT_ENVIRONMENT_NAME
 
 # RUN useradd -u 1000 appuser
 
@@ -23,7 +24,8 @@ WORKDIR /deployments
 ENV PROJECT_ARTIFACTID=${PROJECT_ARTIFACTID} \
     PROJECT_VERSION=${PROJECT_VERSION} \
     TEMURIN_IMAGE_VERSION=${TEMURIN_IMAGE_VERSION} \
-    OPENTELEMETRY_VERSION=${OPENTELEMETRY_VERSION}
+    OPENTELEMETRY_VERSION=${OPENTELEMETRY_VERSION} \
+    DEPLOYMENT_ENVIRONMENT_NAME=${DEPLOYMENT_ENVIRONMENT_NAME}
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* && \
     curl https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${OPENTELEMETRY_VERSION}/opentelemetry-javaagent.jar -Lo /opt/opentelemetry-javaagent.jar
