@@ -367,6 +367,7 @@
                                 <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
                                 <CONTAINER_REGISTRY>${container.registry}</CONTAINER_REGISTRY>
                                 <OTLP_ENDPOINT>${kube.otlp.endpoint}</OTLP_ENDPOINT>
+                                <DEPLOYMENT_ENVIRONMENT_NAME>${deployment.environment.name}</DEPLOYMENT_ENVIRONMENT_NAME>
                                 <KUBE_INGRESS_ROOT_DOMAIN>${kube.ingress.root.domain}</KUBE_INGRESS_ROOT_DOMAIN>
                             </environmentVariables>
                         </configuration>
@@ -389,6 +390,7 @@
                                 <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
                                 <CONTAINER_REGISTRY>${container.registry}</CONTAINER_REGISTRY>
                                 <OTLP_ENDPOINT>${kube.otlp.endpoint}</OTLP_ENDPOINT>
+                                <DEPLOYMENT_ENVIRONMENT_NAME>${deployment.environment.name}</DEPLOYMENT_ENVIRONMENT_NAME>
                                 <KUBE_INGRESS_ROOT_DOMAIN>${kube.ingress.root.domain}</KUBE_INGRESS_ROOT_DOMAIN>
                             </environmentVariables>
                         </configuration>
@@ -411,6 +413,7 @@
                                 <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
                                 <CONTAINER_REGISTRY>${container.registry}</CONTAINER_REGISTRY>
                                 <OTLP_ENDPOINT>${kube.otlp.endpoint}</OTLP_ENDPOINT>
+                                <DEPLOYMENT_ENVIRONMENT_NAME>${deployment.environment.name}</DEPLOYMENT_ENVIRONMENT_NAME>
                                 <KUBE_INGRESS_ROOT_DOMAIN>${kube.ingress.root.domain}</KUBE_INGRESS_ROOT_DOMAIN>
                             </environmentVariables>
                         </configuration>
@@ -442,7 +445,7 @@
                             <OTEL_JAVAAGENT_ENABLED>true</OTEL_JAVAAGENT_ENABLED>
                             <OTEL_METRIC_EXPORT_INTERVAL>15000</OTEL_METRIC_EXPORT_INTERVAL>
                             <OTEL_EXPORTER_OTLP_TIMEOUT>10000</OTEL_EXPORTER_OTLP_TIMEOUT>
-                            <OTEL_RESOURCE_ATTRIBUTES>service.name=${project.artifactId},service.namespace=${project.artifactId}-ns,service.instance.id=${project.artifactId},service.version=${project.version}</OTEL_RESOURCE_ATTRIBUTES>
+                            <OTEL_RESOURCE_ATTRIBUTES>deployment.environment.name=${deployment.environment.name},service.name=${project.artifactId},service.namespace=${project.artifactId}-ns,service.instance.id=${project.artifactId},service.version=${project.version}</OTEL_RESOURCE_ATTRIBUTES>
                         </environmentVariables>
                     </configuration>
                 </plugin>
