@@ -25,7 +25,6 @@ spec:
         prometheus.io/port: "8081"
         prometheus.io/path:  "/actuator/prometheus"
         profiles.grafana.com/java.enabled: "true"
-        resource.opentelemetry.io/service.name: "${PROJECT_ARTIFACTID}"
       labels:
         app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
         app.kubernetes.io/part-of: "${PROJECT_GROUPID}"
