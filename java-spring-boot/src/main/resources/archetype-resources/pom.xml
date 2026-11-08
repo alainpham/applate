@@ -138,6 +138,8 @@
                                 <argument>--build-arg</argument>
                                 <argument>PROJECT_VERSION=${project.version}</argument>
                                 <argument>--build-arg</argument>
+                                <argument>DEPLOYMENT_ENVIRONMENT_NAME=${deployment.environment.name}</argument>
+                                <argument>--build-arg</argument>
                                 <argument>TEMURIN_IMAGE_VERSION=${temurin.image.version}</argument>
                                 <argument>--build-arg</argument>
                                 <argument>OPENTELEMETRY_VERSION=${opentelemetry.version}</argument>
