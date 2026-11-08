@@ -19,6 +19,23 @@ const entry = {id: 1, project: 'example', coordinates: 'mvn:org.test:example',
     latestVersionFilter: '^3\\.'};
 const xml = '<descriptor xmlns="urn:maven"><requiredProperty key="version"><defaultValue>3.9.0</defaultValue></requiredProperty></descriptor>';
 
+test('dependency inventory covers the npm dependencies of each tracked Node.js project', async () => {
+    const entries = await loadDependencies();
+    const root = path.resolve(__dirname, '../../..');
+    for (const project of ['nodejs-express', 'helper/templategen', 'helper/agentv']) {
+        const resource = project + '/package.json';
+        const manifest = JSON.parse(await fs.readFile(path.join(root, resource), 'utf8'));
+        for (const dependency of Object.keys(manifest.dependencies)) {
+            const pointer = '/dependencies/' + dependency.replace(/~/g, '~0').replace(/\//g, '~1');
+            assert.ok(entries.some(entry => entry.project === project
+                && entry.currentVersionResource === resource
+                && entry.coordinates === 'npm:' + dependency
+                && entry.currentVersionExpression === 'language:jsonpointer:' + pointer),
+            `Missing inventory entry for ${project}: ${dependency}`);
+        }
+    }
+});
+
 test('extracts the original Camel XPath with namespaces, and rejects missing/ambiguous values', () => {
     assert.equal(extractVersion(xml, entry.currentVersionExpression), '3.9.0');
     assert.throws(() => extractVersion('<root/>', entry.currentVersionExpression), /exactly one/);

@@ -69,6 +69,11 @@ mvn exec:exec@kdelete
 mvn exec:exec@kdeploy
 ```
 
+The manifest creates a namespace named after the Maven group ID and places the
+Deployment, Service, and Ingress in it. Use a group ID that is also a valid
+Kubernetes namespace name (lowercase letters, digits, and hyphens, at most 63
+characters). `kdelete` deletes the namespace and all its contents as well.
+
 #[[## Multiarch build and push to registry]]#
 
 Multi arch build and push directly to remote registry. First create a builder in buildx

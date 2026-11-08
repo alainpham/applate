@@ -71,15 +71,15 @@ to refresh its current versions and statuses.
 
 ## Dependency configuration
 
-Edit [`data/dependencies.yaml`](data/dependencies.yaml). It contains 47 explicit
+Edit [`data/dependencies.yaml`](data/dependencies.yaml). It contains 49 explicit
 entries: the original watcher's 28 Maven/Docker entries and the npm dependencies
 of `nodejs-express`, `helper/templategen`, and this application. Add an entry when a
 new dependency should be tracked; this is an inventory, not an automatic repository
 scanner. Project files are read again, and configuration edits picked up, at each check.
 
-The old IDs and maintained version lines are retained. Filters use anchored,
-escaped version prefixes; Spring Boot's Temurin entry now follows Java 25 to match
-its current archetype. The other archetypes retain Java 17. Filters are tracking
+The old IDs are retained. Filters use anchored, escaped version prefixes and follow
+the current maintained version lines. Both Spring Boot archetypes track Java 25;
+the Quarkus Camel and plain Java archetypes track Java 17. Filters are tracking
 policies, not a guarantee that upgrading independently keeps frameworks compatible.
 
 ```yaml
@@ -186,6 +186,24 @@ Individual dependency failures are returned in the report with HTTP 200. Invalid
 configuration or a report-write failure returns an HTTP error. Version checks do
 not modify the tracked projects.
 
+## Server structure and API documentation
+
+`server/server.js` owns HTTP and WebSocket setup, UI configuration, static files,
+Swagger, error handling, and shutdown. It exports `createServer()` so importing it
+does not start a listener. Tests can inject a tracker and dependency configuration
+file without contacting upstream services.
+
+`server/services.js` contains the business routes (`/ping` and `/api/*`), initializes
+the tracker, and builds dependency messages for connected clients. Version reads,
+comparisons, persistence, and registry calls remain in `server/tracker/`. The CLI
+and artifact updater use those modules independently of the HTTP server.
+
+`swagger-jsdoc` generates `/v3/api-docs` at startup from `@openapi` comments beside
+the routes in `server/**/*.js`. Update those comments with API changes; schemas
+are explicitly documented, not inferred from handlers. The title follows
+`APP_NAME` and the version comes from `package.json`. Swagger's HTML and initializer
+live under `server/swagger-ui/`, keeping application UI assets in `public/`.
+
 ## Environment
 
 | Variable | Default | Purpose |
@@ -203,11 +221,29 @@ not modify the tracked projects.
 
 ## Docker
 
-Build the image:
+Docker Buildx is required. Build and push the versioned image using package scripts:
 
 ```sh
-docker build -t alainpham/agentv .
+npm run build
+npm run push
 ```
+
+`config.container_registry` (default: `alainpham`) and the package name/version
+define the image, currently `alainpham/agentv:1.0.0`. Application dependencies are
+installed from the lockfile with `npm ci` during the Docker build.
+
+To run behind Traefik:
+
+```sh
+npm run drun
+```
+
+This uses `config.docker_network` (`primenet`) and routes
+`http://agentv.d.codersandbox.com` using `config.docker_root_domain`. Traefik must
+be running on the same Docker network with an `http` entrypoint, and DNS must point
+to it. The command passes `config.root_git_repo` to `ROOT_GIT_REPO` and stores
+reports in the `agentv-results` Docker volume mounted at `/data`. Set that source
+configuration to the repository and branch you want to check.
 
 To read committed versions directly from GitHub without mounting a checkout:
 
@@ -216,7 +252,7 @@ docker run --rm -p 8080:8080 \
   -e ROOT_GIT_REPO=https://raw.githubusercontent.com/alainpham/applate/master \
   -e RESULTS_FILE=/data/results.yaml \
   -v agentv-results:/data \
-  --name agentv alainpham/agentv
+  --name agentv alainpham/agentv:1.0.0
 ```
 
 `ROOT_GIT_REPO` accepts a raw-content root as above, a GitHub repository URL such
@@ -233,7 +269,7 @@ To read a local checkout on the Docker host instead, leave `ROOT_GIT_REPO` unset
 docker run --rm -p 8080:8080 \
   -e APPLATE_ROOT=/applate \
   -v /absolute/path/to/applate:/applate:ro \
-  --name agentv alainpham/agentv
+  --name agentv alainpham/agentv:1.0.0
 ```
 
 The image includes the dependency configuration. Local mode requires the repository
@@ -242,10 +278,47 @@ environment in the same way, or mount a checkout and set `APPLATE_ROOT`.
 Mount a writable directory and set `RESULTS_FILE` there if reports should survive
 container replacement, or use the named volume shown in the remote example.
 
+## Kubernetes
+
+Requires kubectl configured for your cluster, `envsubst` (GNU gettext), an ingress
+controller, and DNS pointing to that controller. Run commands from `helper/agentv`:
+
+```sh
+npm run kyml    # Generate target/agentv-deploy.yaml without applying it
+npm run deploy # Render the template and apply it to the current kubectl context
+npm run delete # Delete the rendered resources, including the namespace and its contents
+```
+
+`deploy.envsubst.yaml` is the deployment source. Both deployment and deletion pipe
+its rendered contents to kubectl without a `-n` override. The manifest creates the
+configured namespace and explicitly places the Deployment, Service, and Ingress
+in it. Generated manifests in `target/` are gitignored and excluded from the image.
+Reports in the default pod filesystem are ephemeral; mount persistent storage and
+set `RESULTS_FILE` there to retain them across pod replacement.
+
+The following `package.json` settings are shared by the package scripts and template:
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `config.container_registry` | `alainpham` | Docker registry/namespace |
+| `config.namespace` | `agentv-ns` | Namespace created by the manifest |
+| `config.deployment_environment_name` | `dev` | Telemetry deployment environment |
+| `config.docker_network` | `primenet` | Docker network for `drun` |
+| `config.docker_root_domain` | `d.codersandbox.com` | Traefik hostname suffix |
+| `config.kube_ingress_root_domain` | `k.codersandbox.com` | Ingress hostname suffix |
+| `config.docker_otlp_endpoint` | `http://alloy:4318` | Docker telemetry collector |
+| `config.kube_otlp_endpoint` | `http://grafana-cloud-alloy-deployment.monitoring.svc.cluster.local:4318` | Kubernetes telemetry collector |
+| `config.root_git_repo` | `https://raw.githubusercontent.com/alainpham/applate/master` | Tracked source root for `drun` and Kubernetes |
+
+The default Ingress hostname is `agentv.k.codersandbox.com`. These package settings
+configure container tooling; `npm start`, the CLI, and direct `docker run` commands
+continue to use the environment variables documented above.
+
 ## OpenTelemetry
 
-The existing Docker image installs auto-instrumentation under `/otel`. To configure
-an instrumented runtime:
+The Docker image installs auto-instrumentation under `/otel`, with exporters
+disabled by default. Kubernetes enables OTLP exporters explicitly. To configure an
+instrumented local runtime, or pass these settings with `docker run -e`:
 
 ```sh
 export OTEL_METRICS_EXPORTER="otlp"
@@ -259,3 +332,7 @@ export OTEL_SERVICE_NAME="agentv"
 The container supplies `NODE_OPTIONS` to load the instrumentation. For local
 instrumentation, install it separately and set
 `NODE_OPTIONS="--require @opentelemetry/auto-instrumentations-node/register"`.
+
+Both Docker and Kubernetes use `config.deployment_environment_name` for
+`deployment.environment.name`. Kubernetes sets `service.instance.id` to
+`$(POD_NAMESPACE).$(POD_NAME).<package-name>`, and resolves the pod variables at runtime.

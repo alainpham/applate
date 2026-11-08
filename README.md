@@ -43,8 +43,13 @@ jcamelspring
 jcamelquarkus
 
 # NodeJS Express
-njsexpress YOUR_PROJECT_NAME
+njsexpress
 ```
+
+`njsexpress` prompts for the project name and namespace (default: `njs-ns`).
+You can also pass values directly, for example `njsexpress orders orders-ns`,
+to create the `orders/` project with namespace `orders-ns`. If only the project
+name is supplied, it prompts for the namespace. Run `njsexpress --help` for usage.
 
 ### Camel Spring Boot with CXF SOAP services
 

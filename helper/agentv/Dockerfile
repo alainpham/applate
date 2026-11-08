@@ -11,6 +11,14 @@ RUN npm install --omit=dev --quiet --no-save \
 ENV NODE_PATH=/otel/node_modules
 ENV NODE_OPTIONS="--require @opentelemetry/auto-instrumentations-node/register"
 
+# Exporters are disabled by default; enable them with OTEL_*_EXPORTER=otlp.
+ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://alloy:4318 \
+    OTEL_METRICS_EXPORTER=none \
+    OTEL_LOGS_EXPORTER=none \
+    OTEL_TRACES_EXPORTER=none \
+    OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf \
+    OTEL_RESOURCE_ATTRIBUTES=deployment.environment.name=dev,service.name=agentv,service.namespace=agentv-ns,service.instance.id=agentv,service.version=1.0.0
+
 # Set the working directory
 WORKDIR /usr/src/app
 
@@ -18,7 +26,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --omit=dev --quiet
+RUN npm ci --omit=dev --quiet
 
 # Copy the rest of the application code
 COPY public ./public

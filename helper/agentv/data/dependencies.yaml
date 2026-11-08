@@ -36,13 +36,13 @@
   currentVersionResource: java-spring-boot-camel/src/main/resources/META-INF/maven/archetype-metadata.xml
   currentVersionExpression: language:xpath://*:requiredProperty[@key='camel-version']/*:defaultValue/text()
   coordinates: mvn:org.apache.camel.springboot:camel-spring-boot-dependencies
-  latestVersionFilter: ^4\.4\.
+  latestVersionFilter: ^4\.23\.
 - id: 201
   project: java-spring-boot-camel
   currentVersionResource: java-spring-boot-camel/src/main/resources/META-INF/maven/archetype-metadata.xml
   currentVersionExpression: language:xpath://*:requiredProperty[@key='spring-boot-version']/*:defaultValue/text()
   coordinates: mvn:org.springframework.boot:spring-boot-dependencies
-  latestVersionFilter: ^3\.2\.
+  latestVersionFilter: ^4\.1\.
 - id: 203
   project: java-spring-boot-camel
   currentVersionResource: java-spring-boot-camel/src/main/resources/META-INF/maven/archetype-metadata.xml
@@ -84,7 +84,7 @@
   currentVersionResource: java-spring-boot-camel/src/main/resources/META-INF/maven/archetype-metadata.xml
   currentVersionExpression: language:xpath://*:requiredProperty[@key='temurin-image-version']/*:defaultValue/text()
   coordinates: docker:library/eclipse-temurin
-  latestVersionFilter: ^17\..*-jre$
+  latestVersionFilter: ^25\..*-jre$
 - id: 300
   project: java-plain
   currentVersionResource: java-plain/src/main/resources/META-INF/maven/archetype-metadata.xml
@@ -264,3 +264,13 @@
   currentVersionResource: helper/agentv/package.json
   currentVersionExpression: language:jsonpointer:/dependencies/yaml
   coordinates: npm:yaml
+- id: 519
+  project: nodejs-express
+  currentVersionResource: nodejs-express/package.json
+  currentVersionExpression: language:jsonpointer:/dependencies/swagger-jsdoc
+  coordinates: npm:swagger-jsdoc
+- id: 520
+  project: helper/agentv
+  currentVersionResource: helper/agentv/package.json
+  currentVersionExpression: language:jsonpointer:/dependencies/swagger-jsdoc
+  coordinates: npm:swagger-jsdoc

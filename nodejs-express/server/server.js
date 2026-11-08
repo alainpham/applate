@@ -1,12 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
-const fs = require("fs");
-const axios = require('axios');
 const logger = require('./logger');
 const liveReload = require('./livereload');
 const http = require('http');
 const WebSocket = require("ws");
+const swaggerJsdoc = require("swagger-jsdoc");
+const {version} = require("../package.json");
+const {createServices} = require("./services");
 
 // add the prometheus middleware to all routes
 const app = express();
@@ -16,6 +17,14 @@ const uiConfig = {
     name: process.env.APP_NAME || "nodejs-express",
     theme: process.env.THEME ?? process.env.theme ?? "main-dark-green"
 };
+const apiDocs = swaggerJsdoc({
+    failOnErrors: true,
+    definition: {
+        openapi: "3.0.3",
+        info: {title: uiConfig.name, version}
+    },
+    apis: [path.join(__dirname, "**/*.js")]
+});
 
 // Middleware
 app.use(bodyParser.json());
@@ -28,41 +37,39 @@ const httpServer = http.createServer(app);
 const wss = new WebSocket.Server({server: httpServer, path: "/websocket"});
 
 
+/**
+ * @openapi
+ * /uiconfig:
+ *   get:
+ *     responses:
+ *       '200':
+ *         description: UI configuration
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [name, theme]
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                 theme:
+ *                   type: string
+ */
 app.get("/uiconfig", (req, res) => {
     res.json(uiConfig);
 });
 
-app.get("/ping", (req, res) => {
-    logger.info("Received ping");
-    res.status(200).json({ message: "pong" });
-});
-
-app.post("/send-msg", (req, res) => {
-    wss.broadcast({metadata: {type: "person"}, data: [req.body]});
-    res.json(req.body);
-});
-
 app.get("/v3/api-docs", (req, res) => {
-    res.json({
-        openapi: "3.0.3",
-        info: {title: uiConfig.name, version: "1.0.0"},
-        paths: {
-            "/ping": {get: {responses: {"200": {description: "Service is available"}}}},
-            "/uiconfig": {get: {responses: {"200": {description: "UI configuration"}}}},
-            "/send-msg": {post: {
-                requestBody: {required: true, content: {"application/json": {schema: {type: "object"}}}},
-                responses: {"200": {description: "Message broadcast to connected viewers"}}
-            }}
-        }
-    });
+    res.json(apiDocs);
 });
 
-app.use("/swagger-ui", express.static(require("swagger-ui-dist").getAbsoluteFSPath()));
+const SWAGGER_UI_DIR = path.join(__dirname, "swagger-ui");
+app.use("/swagger-ui",
+    express.static(SWAGGER_UI_DIR),
+    express.static(require("swagger-ui-dist").getAbsoluteFSPath())
+);
 app.get("/swagger-ui.html", (req, res) => {
-    res.type("html").send(`<!doctype html>
-<html><head><title>Swagger UI</title><link rel="stylesheet" href="/swagger-ui/swagger-ui.css"></head>
-<body><div id="swagger-ui"></div><script src="/swagger-ui/swagger-ui-bundle.js"></script>
-<script>SwaggerUIBundle({url: "/v3/api-docs", dom_id: "#swagger-ui"});</script></body></html>`);
+    res.sendFile(path.join(SWAGGER_UI_DIR, "index.html"));
 });
 
 wss.broadcast = function broadcastToView(data){
@@ -75,6 +82,8 @@ wss.broadcast = function broadcastToView(data){
         }
     );
  }
+
+app.use(createServices({broadcast: wss.broadcast}));
 
 // Start the server
 const server = httpServer.listen(PORT, () => {

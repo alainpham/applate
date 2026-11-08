@@ -1,92 +1,86 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const path = require("path");
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('node:path');
+const http = require('node:http');
+const WebSocket = require('ws');
+const swaggerJsdoc = require('swagger-jsdoc');
 const logger = require('./logger');
 const liveReload = require('./livereload');
-const http = require('http');
-const WebSocket = require("ws");
-const {Tracker} = require('./tracker/tracker');
-const {DATA_FILE} = require('./tracker/config');
+const {name, version} = require('../package.json');
+const {createServices} = require('./services');
 
-async function createServer({tracker = new Tracker()} = {}) {
+const PUBLIC_DIR = path.join(__dirname, '../public');
+const SWAGGER_UI_DIR = path.join(__dirname, 'swagger-ui');
+
+async function createServer({tracker, dataFile} = {}) {
     const app = express();
-    const PUBLIC_DIR = path.join(__dirname, "../public");
     const uiConfig = {
-        name: process.env.APP_NAME || "agentv",
-        theme: process.env.THEME ?? process.env.theme ?? "main-dark-green"
+        name: process.env.APP_NAME || name,
+        theme: process.env.THEME ?? process.env.theme ?? 'main-dark-green'
     };
-
-    // Middleware
-    app.use(bodyParser.json());
-
-    liveReload.attach(app, PUBLIC_DIR); // dev only, no-op unless LIVERELOAD=1
-    app.use(express.static(PUBLIC_DIR)); // Serve static files
-
-    // add websocket
+    const apiDocs = swaggerJsdoc({
+        failOnErrors: true,
+        definition: {openapi: '3.0.3', info: {title: uiConfig.name, version}},
+        apis: [path.join(__dirname, '**/*.js')]
+    });
     const httpServer = http.createServer(app);
-    const wss = new WebSocket.Server({server: httpServer, path: "/websocket"});
-
-
-    app.get("/uiconfig", (req, res) => {
-        res.json(uiConfig);
-    });
-
-    app.get("/ping", (req, res) => {
-        logger.info("Received ping");
-        res.status(200).json({ message: "pong" });
-    });
-
-    app.get('/api/dependencies', (req, res) => {
-        res.set('Cache-Control', 'no-store').json(tracker.snapshot());
-    });
-
-    app.post('/api/check', async (req, res) => {
-        res.json(await tracker.check());
-    });
-
-    app.get('/api/config.yaml', (req, res) => {
-        res.download(DATA_FILE, 'dependencies.yaml');
-    });
-
-    app.get("/v3/api-docs", (req, res) => {
-        res.json({
-            openapi: "3.0.3",
-            info: {title: uiConfig.name, version: "1.0.0"},
-            paths: {
-                "/ping": {get: {responses: {"200": {description: "Service is available"}}}},
-                "/uiconfig": {get: {responses: {"200": {description: "UI configuration"}}}},
-                '/api/dependencies': {get: {responses: {'200': {description: 'Configured dependencies, current versions, check results and summary'}}}},
-                '/api/check': {post: {description: 'Read current versions and check ecosyste.ms. Concurrent callers share one run.',
-                    responses: {'200': {description: 'Completed version check; individual failures are reported per dependency'},
-                        '500': {description: 'Configuration or report persistence failed'}}}},
-                '/api/config.yaml': {get: {responses: {'200': {description: 'Download dependency configuration as YAML'}}}}
-            }
-        });
-    });
-
-    app.use("/swagger-ui", express.static(require("swagger-ui-dist").getAbsoluteFSPath()));
-    app.get("/swagger-ui.html", (req, res) => {
-        res.type("html").send(`<!doctype html>
-    <html><head><title>Swagger UI</title><link rel="stylesheet" href="/swagger-ui/swagger-ui.css"></head>
-    <body><div id="swagger-ui"></div><script src="/swagger-ui/swagger-ui-bundle.js"></script>
-    <script>SwaggerUIBundle({url: "/v3/api-docs", dom_id: "#swagger-ui"});</script></body></html>`);
-    });
-
-    wss.broadcast = function broadcastToView(data) {
-        const stringBody = JSON.stringify(data);
+    const wss = new WebSocket.Server({server: httpServer, path: '/websocket'});
+    const broadcast = data => {
+        const body = JSON.stringify(data);
         wss.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) client.send(stringBody);
+            if (client.readyState === WebSocket.OPEN) client.send(body);
         });
     };
 
-    tracker.onChange = snapshot => wss.broadcast({metadata: {type: 'dependencies'}, data: snapshot});
-    wss.on('connection', socket => socket.send(JSON.stringify({metadata: {type: 'dependencies'}, data: tracker.snapshot()})));
+    let services;
+    try {
+        services = await createServices({tracker, dataFile, broadcast});
+    } catch (error) {
+        wss.close();
+        throw error;
+    }
+
+    app.use(bodyParser.json());
+    liveReload.attach(app, PUBLIC_DIR);
+    app.use(express.static(PUBLIC_DIR));
+
+    /**
+     * @openapi
+     * /uiconfig:
+     *   get:
+     *     responses:
+     *       '200':
+     *         description: UI configuration
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               required: [name, theme]
+     *               properties:
+     *                 name:
+     *                   type: string
+     *                 theme:
+     *                   type: string
+     */
+    app.get('/uiconfig', (req, res) => res.json(uiConfig));
+    app.get('/v3/api-docs', (req, res) => res.json(apiDocs));
+    app.use('/swagger-ui',
+        express.static(SWAGGER_UI_DIR),
+        express.static(require('swagger-ui-dist').getAbsoluteFSPath())
+    );
+    app.get('/swagger-ui.html', (req, res) => {
+        res.sendFile(path.join(SWAGGER_UI_DIR, 'index.html'));
+    });
+
+    app.use(services.router);
+    wss.on('connection', services.onConnection);
     app.use((error, req, res, next) => {
         logger.error({err: error}, 'Request failed');
+        if (res.headersSent) return next(error);
         res.status(error.status || 500).json({error: error.message});
     });
-    await tracker.initialize();
-    return {app, server: httpServer, wss, tracker};
+
+    return {app, server: httpServer, wss, tracker: services.tracker};
 }
 
 if (require.main === module) {

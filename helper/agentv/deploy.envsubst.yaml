@@ -1,0 +1,144 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "${npm_package_config_namespace}"
+---
+# Deployment descriptor
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: "${npm_package_config_namespace}"
+  labels:
+    app.kubernetes.io/name: "${npm_package_name}"
+    app.kubernetes.io/part-of: "${npm_package_config_namespace}"
+    app.kubernetes.io/instance: "${npm_package_name}"
+    app.kubernetes.io/version: "${npm_package_version}"
+  name: "${npm_package_name}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "${npm_package_name}"
+      app.kubernetes.io/component: "api"
+      app.kubernetes.io/part-of: "${npm_package_config_namespace}"
+      app.kubernetes.io/instance: "${npm_package_name}"
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+        prometheus.io/port: "8080"
+        prometheus.io/path:  "/metrics"
+      labels:
+        app.kubernetes.io/name: "${npm_package_name}"
+        app.kubernetes.io/component: "api"
+        app.kubernetes.io/part-of: "${npm_package_config_namespace}"
+        app.kubernetes.io/instance: "${npm_package_name}"
+        app.kubernetes.io/version: "${npm_package_version}"
+    spec:
+      containers:
+      - name: ${npm_package_name}
+        image: "${npm_package_config_container_registry}/${npm_package_name}:${npm_package_version}"
+        imagePullPolicy: Always
+        env:
+          - name: ROOT_GIT_REPO
+            value: "${npm_package_config_root_git_repo}"
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: OTEL_METRICS_EXPORTER
+            value: "otlp"
+          - name: OTEL_LOGS_EXPORTER
+            value: "otlp"
+          - name: OTEL_TRACES_EXPORTER
+            value: "otlp"
+          - name: OTEL_EXPORTER_OTLP_PROTOCOL
+            value: "http/protobuf"
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: "${npm_package_config_kube_otlp_endpoint}"
+          - name: OTEL_SERVICE_NAME
+            value: "${npm_package_name}"
+          - name: NODE_OPTIONS
+            value: "--require @opentelemetry/auto-instrumentations-node/register"
+          - name: OTEL_RESOURCE_ATTRIBUTES
+            value: "deployment.environment.name=${npm_package_config_deployment_environment_name},service.name=${npm_package_name},service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAMESPACE).$(POD_NAME).${npm_package_name},service.version=${npm_package_version},k8s.namespace.name=$(POD_NAMESPACE),k8s.pod.name=$(POD_NAME)"
+        livenessProbe:
+          httpGet:
+            path: "/"
+            port: 8080
+            scheme: "HTTP"
+          initialDelaySeconds: 0
+          successThreshold: 1
+          periodSeconds: 3
+          failureThreshold: 60
+        readinessProbe:
+          httpGet:
+            path: "/"
+            port: 8080
+            scheme: "HTTP"
+          initialDelaySeconds: 0
+          successThreshold: 1
+          periodSeconds: 3
+          failureThreshold: 60
+        resources:
+          # limits:
+          #   cpu: "1.0"
+          #   memory: "1024Mi"
+          # requests:
+          #   cpu: "0.2"
+          #   memory: "128Mi"
+        ports:
+          - containerPort: 8080
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  namespace: "${npm_package_config_namespace}"
+  labels:
+    app.kubernetes.io/name: "${npm_package_name}"
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "${npm_package_config_namespace}"
+    app.kubernetes.io/instance: "${npm_package_name}"
+    app.kubernetes.io/version: "${npm_package_version}"
+  name: "${npm_package_name}"
+spec:
+  type: ClusterIP
+  ports:
+  - name: "http"
+    port: 8080
+    protocol: "TCP"
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: "${npm_package_name}"
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "${npm_package_config_namespace}"
+    app.kubernetes.io/instance: "${npm_package_name}"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "${npm_package_name}"
+  namespace: "${npm_package_config_namespace}"
+  labels:
+    app.kubernetes.io/name: "${npm_package_name}"
+    app.kubernetes.io/part-of: "${npm_package_config_namespace}"
+    app.kubernetes.io/instance: "${npm_package_name}"
+    app.kubernetes.io/version: "${npm_package_version}"
+spec:
+  rules:
+  - host: "${npm_package_name}.${npm_package_config_kube_ingress_root_domain}"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: "${npm_package_name}"
+            port:
+              number: 8080
+---

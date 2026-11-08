@@ -3,3 +3,4 @@ node_modules
 .npm-cache
 data/results.yaml
 data/results.yaml.*.tmp
+target/

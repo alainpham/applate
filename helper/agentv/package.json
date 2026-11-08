@@ -2,17 +2,36 @@
   "name": "agentv",
   "version": "1.0.0",
   "main": "server/server.js",
+  "config": {
+    "container_registry": "alainpham",
+    "namespace": "agentv-ns",
+    "deployment_environment_name": "dev",
+    "docker_network": "primenet",
+    "docker_root_domain": "d.codersandbox.com",
+    "kube_ingress_root_domain": "k.codersandbox.com",
+    "docker_otlp_endpoint": "http://alloy:4318",
+    "kube_otlp_endpoint": "http://grafana-cloud-alloy-deployment.monitoring.svc.cluster.local:4318",
+    "root_git_repo": "https://raw.githubusercontent.com/alainpham/applate/master"
+  },
   "scripts": {
     "start": "node server/server.js",
     "dev": "LIVERELOAD=1 node --watch --watch-path=./server --watch-path=./public server/server.js",
     "check": "node server/check.js",
-    "test": "node --test"
+    "test": "node --test",
+    "build": "docker buildx build --load --progress=plain -t $npm_package_config_container_registry/$npm_package_name:$npm_package_version .",
+    "push": "docker push $npm_package_config_container_registry/$npm_package_name:$npm_package_version",
+    "drun": "docker run --rm --name $npm_package_name --hostname $npm_package_name --network $npm_package_config_docker_network -e OTEL_EXPORTER_OTLP_ENDPOINT=$npm_package_config_docker_otlp_endpoint -e OTEL_RESOURCE_ATTRIBUTES=deployment.environment.name=$npm_package_config_deployment_environment_name,service.name=$npm_package_name,service.namespace=$npm_package_config_namespace,service.instance.id=$npm_package_name,service.version=$npm_package_version -e ROOT_GIT_REPO=$npm_package_config_root_git_repo -e RESULTS_FILE=/data/results.yaml -v $npm_package_name-results:/data -l traefik.enable=true -l traefik.http.services.$npm_package_name.loadbalancer.server.port=8080 -l traefik.http.services.$npm_package_name.loadbalancer.server.scheme=http -l traefik.http.routers.$npm_package_name.service=$npm_package_name -l traefik.http.routers.$npm_package_name.entrypoints=http -l traefik.http.routers.$npm_package_name.tls=false -l 'traefik.http.routers.'$npm_package_name'.rule=Host(`'$npm_package_name.$npm_package_config_docker_root_domain'`)' $npm_package_config_container_registry/$npm_package_name:$npm_package_version",
+    "deploy": "envsubst < deploy.envsubst.yaml | kubectl apply -f -",
+    "kyml": "mkdir -p target && envsubst < deploy.envsubst.yaml > target/$npm_package_name-deploy.yaml",
+    "delete": "envsubst < deploy.envsubst.yaml | kubectl delete -f -"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "Track applate dependency versions with YAML configuration and ecosyste.ms",
-  "engines": {"node": ">=22"},
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@xmldom/xmldom": "^0.9.12",
     "axios": "1.21.0",
@@ -21,6 +40,7 @@
     "express": "5.3.0",
     "pino": "10.4.0",
     "semver": "^7.8.6",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-dist": "5.34.1",
     "ws": "8.22.1",
     "xpath": "^0.0.36",
